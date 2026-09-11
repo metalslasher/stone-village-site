@@ -1,0 +1,47 @@
+:root {
+  color-scheme: light;
+  --color-paper: #f5f2eb;
+  --color-surface: #fffdf8;
+  --color-ink: #302c27;
+  --color-muted: #655e54;
+  --color-stone: #eeebe4;
+  --color-line: #c7bdae;
+  --color-accent: #745334;
+  --color-accent-hover: #583c24;
+  --color-focus: #34574a;
+  --color-error: #a12d25;
+
+  /* Locally hosted Manrope, SIL OFL; Cyrillic and Latin variable subsets. */
+  --font-display: 'Manrope', 'Segoe UI', Arial, sans-serif;
+  --font-body: 'Manrope', 'Segoe UI', Arial, sans-serif;
+  --type-caption: 0.875rem;
+  --type-body: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
+  --type-lead: clamp(1.25rem, 1.05rem + 0.85vw, 1.875rem);
+  --type-heading: clamp(2rem, 1.2rem + 3.5vw, 4.75rem);
+  --type-display: clamp(2.75rem, 1.4rem + 5.5vw, 7rem);
+  --leading-body: 1.6;
+  --leading-heading: 1.08;
+  --measure-body: 62ch;
+  --measure-heading: 20ch;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-24: 6rem;
+  --space-32: 8rem;
+  --gutter: clamp(1.25rem, 4vw, 5rem);
+  --grid-gap: clamp(1rem, 2vw, 2rem);
+  --page-max: 112rem;
+  --touch-target: 2.75rem;
+  --focus-offset: 0.25rem;
+  --duration-feedback: 160ms;
+  --duration-reveal: 480ms;
+  --ease-settle: cubic-bezier(0.22, 1, 0.36, 1);
+  --layer-header: 20;
+  --layer-dialog: 50;
+}

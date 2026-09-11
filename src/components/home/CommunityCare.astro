@@ -1,0 +1,23 @@
+---
+import { Image } from 'astro:assets';
+import entrance from '@/assets/infrastructure/village-entrance.jpg';
+---
+<section id="care" class="care" aria-labelledby="care-title">
+  <div class="care-copy"><h2 id="care-title">Територія<br />під доглядом.</h2>
+    <dl>
+      <div><dt>Контроль доступу</dt><dd>Закрита територія, охорона та відеоспостереження.</dd></div>
+      <div><dt>Укриття</dt><dd>Передбачені в концепції містечка. У плануванні котеджу 228 м² також позначена безпечна кімната.</dd></div>
+      <div><dt>Обслуговування</dt><dd>Керуюча компанія доглядає спільну територію. Для відвідувачів — гостьовий паркінг.</dd></div>
+    </dl>
+  </div>
+  <figure data-image-reveal><Image src={entrance} alt="Візуалізація контрольованого в’їзду до Stone Village зі шлагбаумом" widths={[640,960,1280,1680]} sizes="(max-width:767px) 100vw, 55vw" format="webp" loading="lazy"/></figure>
+</section>
+<style>
+ .care {display:grid;grid-template-columns:1fr 1.25fr;gap:5vw;align-items:stretch;padding:clamp(3rem,5vw,5rem) var(--gutter);}
+ h2 {font-size:clamp(2.3rem,4vw,4.5rem);margin-bottom:2rem;}
+ dl>div {border-top:1px solid var(--color-line);padding:1.1rem 0;display:grid;grid-template-columns:.8fr 1.3fr;gap:1.25rem;}
+ dt {font-size:1rem;} dd {font-size:.9rem;color:var(--color-muted);}
+ figure {position:relative;overflow:hidden;} img {position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:52% center;}
+ @media(max-width:1000px){dl>div {grid-template-columns:1fr;gap:.4rem;}}
+ @media(max-width:767px){.care {grid-template-columns:1fr;gap:1.5rem;} .care-copy {display:contents;} h2 {margin:0;} figure {grid-row:2;aspect-ratio:1.2;margin-inline:calc(-1 * var(--gutter));} dl>div {grid-template-columns:1fr;gap:.5rem;} dd {font-size:.9375rem;}}
+</style>

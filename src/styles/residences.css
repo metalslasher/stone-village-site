@@ -1,0 +1,29 @@
+.residence-cta {display:flex;align-items:center;justify-content:space-between;gap:2rem;min-height:52px;padding:1rem 1.3rem;background:var(--color-ink);color:var(--color-paper);border:0;cursor:pointer;font-size:.9rem;}
+.residence-cta:hover {background:var(--color-accent-hover);}
+.text-link {display:inline-flex;align-items:center;justify-content:space-between;min-height:44px;gap:1.5rem;text-decoration:none;border-bottom:1px solid var(--color-line);}
+.residence-facts {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2rem;padding:2rem var(--gutter) 3rem;}
+.residence-facts>div {border-top:1px solid var(--color-line);padding-top:1rem;}
+.residence-facts dt {font-size:.8rem;color:var(--color-muted);margin-bottom:.5rem;}
+.residence-facts dd {font-size:clamp(3rem,5vw,5rem);line-height:1.2;font-weight:300;letter-spacing:-.04em;}
+.residence-facts small {font-size:1rem;letter-spacing:0;}
+.residence-specs {padding:clamp(3rem,5vw,5rem) var(--gutter);}
+.residence-specs header {display:flex;align-items:end;justify-content:space-between;gap:3rem;margin-bottom:2rem;}
+.residence-specs h2 {font-size:clamp(2.3rem,4vw,4.5rem);}
+.residence-specs header p {font-size:1rem;color:var(--color-muted);max-width:35ch;}
+.residence-specs dl {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 4vw;}
+.residence-specs dl>div {padding:1.25rem 0;border-top:1px solid var(--color-line);}
+.residence-specs dt {font-size:1.1rem;margin-bottom:.75rem;}
+.residence-specs dd {font-size:1rem;color:var(--color-muted);max-width:52ch;}
+.village-link {display:flex;align-items:center;justify-content:space-between;gap:3rem;padding:1.5rem var(--gutter) 3rem;}
+.village-link p {font-size:1rem;max-width:48ch;color:var(--color-muted);}
+.village-link a {font-size:.85rem;}
+.other-residence {display:grid;grid-template-columns:.7fr 1fr;gap:4vw;align-items:center;padding:3rem var(--gutter);border-bottom:1px solid var(--color-line);}
+.other-residence img {width:100%;height:260px;object-fit:cover;}
+.other-residence p {font-size:.85rem;color:var(--color-muted);margin-bottom:1rem;}
+.other-residence a {display:flex;justify-content:space-between;align-items:center;gap:1rem;min-height:48px;font-size:clamp(1.6rem,3vw,3rem);text-decoration:none;letter-spacing:-.03em;}
+@media(max-width:767px){
+ .residence-facts {gap:1rem;padding-block:1.5rem 2rem;}.residence-facts dt {font-size:.7rem;min-height:2.9em;}.residence-facts dd {font-size:2.5rem;}.residence-facts small {font-size:.7rem;display:block;}
+ .residence-specs header {display:block;}.residence-specs header p {margin-top:1rem;}.residence-specs dl {grid-template-columns:1fr;}
+ .village-link {flex-direction:column;align-items:start;gap:1rem;padding-bottom:2.5rem;}
+ .other-residence {grid-template-columns:1fr;gap:1.5rem;padding-block:2rem;}.other-residence img {height:220px;}.other-residence a {font-size:1.8rem;}
+}

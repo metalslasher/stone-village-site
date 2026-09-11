@@ -1,0 +1,81 @@
+---
+import { project } from '@/content/project';
+---
+<section class="hero" id="home" aria-labelledby="hero-title">
+  <div class="hero-media">
+    <img class="hero-poster" src="/media/hero/hero-first-frame.jpg" width="1920" height="1080" alt="Вид згори на будинки та освітлені вулиці Stone Village біля лісу" fetchpriority="high" />
+    <video class="hero-video" muted loop playsinline preload="none" poster="/media/hero/hero-first-frame.jpg" aria-hidden="true" tabindex="-1" data-src="/media/hero/hero-video.mp4"></video>
+    <div class="readability" aria-hidden="true"></div>
+  </div>
+  <div class="hero-copy">
+    <h1 id="hero-title">Котеджне містечко<br />біля Львова</h1>
+    <div class="hero-bottom">
+      <p class="intro">Дуплекси та окремі котеджі<br />з власними ділянками.</p>
+      <button class="hero-viewing" data-viewing-open>{project.primaryAction}<span aria-hidden="true">↗</span></button>
+    </div>
+  </div>
+</section>
+<script>
+  const video = document.querySelector<HTMLVideoElement>('.hero-video')!;
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  const connection = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
+  const allowVideo = () => !reduced.matches && !connection?.saveData && !['slow-2g','2g'].includes(connection?.effectiveType ?? '');
+  let wanted = allowVideo();
+  let starting = false;
+  let visible = true;
+  async function play() {
+    if (starting || !video.paused) return;
+    starting = true;
+    if (!video.src) video.src = video.dataset.src!;
+    try { await video.play(); if (!wanted || !visible || document.hidden) video.pause(); }
+    catch { /* Keep the matching poster visible if autoplay is unavailable. */ }
+    finally { starting = false; }
+  }
+  function sync() {
+    if (wanted && visible && !document.hidden) void play(); else video.pause();
+  }
+  const revealFrame = () => {
+    const show = () => video.classList.add('is-playing');
+    if (typeof video.requestVideoFrameCallback === 'function') video.requestVideoFrameCallback(show);
+    else requestAnimationFrame(show);
+  };
+  video.addEventListener('playing', revealFrame, { once: true });
+  video.addEventListener('error', () => { wanted = false; video.classList.remove('is-playing'); });
+  reduced.addEventListener('change', () => { wanted = allowVideo(); sync(); });
+  document.addEventListener('visibilitychange', sync);
+  new IntersectionObserver(([entry]) => { visible = entry?.isIntersecting ?? false; sync(); }, { threshold:0.1 }).observe(video);
+  sync();
+</script>
+<style>
+  .hero { position:relative; min-height:740px; height:100svh; max-height:1100px; color:#fffdf8; background:#242d25; }
+  .hero-media { position:absolute; inset:0; overflow:hidden; }
+  .hero-poster,.hero-video { position:absolute; width:100%; height:100%; object-fit:cover; object-position:50% 48%; }
+  .hero-video { opacity:0; transition:opacity 180ms linear; }
+  .hero-video.is-playing { opacity:1; }
+  /* Localized scrim serves text contrast; no decorative color gradient. */
+  .readability { position:absolute; inset:0; background:linear-gradient(180deg,rgba(13,22,17,.4),transparent 28%),linear-gradient(90deg,rgba(13,22,17,.42),transparent 75%),linear-gradient(0deg,rgba(13,22,17,.3),transparent 48%); }
+  .hero-copy { position:absolute; inset:auto var(--gutter) 4.25rem; max-width:960px; }
+  .eyebrow { font-size:.72rem; letter-spacing:.13em; margin-bottom:1.5rem; }
+  h1 { font-size:clamp(3.5rem,5.8vw,6.3rem); letter-spacing:-.045em; font-weight:400; line-height:1.04; }
+  .hero-bottom { display:flex; align-items:center; gap:3.5rem; margin-top:2.25rem; }
+  .intro { font-size:1rem; line-height:1.65; color:#eeeae0; }
+  .hero-viewing { display:flex; gap:2rem; align-items:center; padding:1.15rem 1.5rem; background:var(--color-paper); color:var(--color-ink); border:1px solid var(--color-paper); cursor:pointer; font-size:.9rem; min-height:52px; transition:background var(--duration-feedback); }
+  .hero-viewing:hover { background:#ded6c9; }
+  .hero-viewing span { font-size:1.25rem; }
+  .hero :focus-visible { outline-color:#fff; }
+  @media(min-width:1600px) { .hero-copy { bottom:5rem; } }
+  @media(max-width:48rem) {
+    .hero { height:auto; min-height:0; max-height:none; background:var(--color-paper); color:var(--color-ink); }
+    .hero-media { position:relative; height:55svh; min-height:330px; max-height:550px; }
+    .hero-poster,.hero-video { object-position:55% 45%; }
+    .readability { background:linear-gradient(180deg,rgba(13,22,17,.5),transparent 40%); }
+    .hero-copy { position:relative; inset:auto; padding:2rem var(--gutter) 2.5rem; }
+    .eyebrow { font-size:.6rem; letter-spacing:.08em; margin-bottom:1rem; }
+    h1 { font-size:clamp(2.5rem,7.8vw,4rem); }
+    .hero-bottom { display:grid; gap:1.5rem; margin-top:1.25rem; }
+    .intro { color:var(--color-muted); font-size:.9rem; }
+    .hero-viewing { width:100%; justify-content:space-between; background:var(--color-ink); border-color:var(--color-ink); color:var(--color-paper); }
+    .hero-viewing:hover { background:var(--color-accent-hover); }
+    .hero :focus-visible { outline-color:var(--color-focus); }
+  }
+</style>

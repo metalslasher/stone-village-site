@@ -1,0 +1,24 @@
+---
+import { Image } from 'astro:assets';
+import facade from '@/assets/architecture/facade-detail-april-2024.jpg';
+import { construction } from '@/content/construction';
+---
+<section id="architecture" class="architecture" aria-labelledby="architecture-title">
+  <figure data-image-reveal><Image src={facade} alt="Реальна деталь фасаду Stone Village: вікна, оздоблення й конструкція балкона, квітень 2024" widths={[480,800,1200]} sizes="(max-width:767px) 100vw, 44vw" format="webp" loading="lazy"/></figure>
+  <div class="architecture-copy">
+    <h2 id="architecture-title">З чого<br />складається дім.</h2>
+    <dl>{construction.map(item=><div><dt>{item.title}</dt><dd>{item.scope === 'Дуплекс 185 м²' ? 'У дуплексах: ' : ''}{item.scope === 'Дуплекс 185 м²' ? item.text.charAt(0).toLowerCase() + item.text.slice(1) : item.text}</dd></div>)}</dl>
+  </div>
+</section>
+<style>
+ .architecture {display:grid;grid-template-columns:1fr 1.1fr;align-items:stretch;gap:clamp(2rem,5vw,5rem);padding:clamp(3rem,5vw,5rem) var(--gutter);background:var(--color-stone);}
+ figure {min-height:0;overflow:hidden;position:relative;}
+ figure img {width:100%;height:100%;position:absolute;inset:0;object-fit:cover;object-position:50% 53%;}
+ h2 {font-size:clamp(2.2rem,3.8vw,4.2rem);margin-bottom:2rem;}
+ dl > div {display:grid;grid-template-columns:.9fr 1.3fr;gap:1.5rem;padding:1.15rem 0;border-top:1px solid var(--color-line);}
+ dt {font-size:1rem;line-height:1.4;} dt span {display:block;font-size:.66rem;color:var(--color-muted);margin-top:.5rem;}
+ dd {font-size:.9rem;color:var(--color-muted);line-height:1.6;}
+ @media(min-width:1600px){.architecture {gap:4vw;} dl>div {padding:1.5rem 0;} dd {font-size:1rem;}}
+ @media(max-width:1000px){.architecture {grid-template-columns:.85fr 1fr;gap:2rem;} dl>div {grid-template-columns:1fr;gap:.5rem;} dt span {display:inline;margin-left:.75rem;}}
+ @media(max-width:767px){.architecture {grid-template-columns:1fr;gap:1.75rem;} figure {margin-inline:calc(-1 * var(--gutter));aspect-ratio:1.3;} .architecture-copy {display:contents;} h2 {grid-row:1;margin:0;} dl>div {padding:1rem 0;} dt {font-size:1.1rem;} dt span {display:block;margin:.3rem 0 0;} dd {font-size:.9375rem;}}
+</style>

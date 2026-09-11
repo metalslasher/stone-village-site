@@ -1,0 +1,40 @@
+---
+import EditorialMotion from '@/components/home/EditorialMotion.astro';
+import SiteDocument from '@/layouts/SiteDocument.astro';
+import SiteFooter from '@/components/navigation/SiteFooter.astro';
+import SiteHeader from '@/components/navigation/SiteHeader.astro';
+import HeroScene from '@/components/home/HeroScene.astro';
+import VillageIntroduction from '@/components/home/VillageIntroduction.astro';
+import EnvironmentStory from '@/components/home/EnvironmentStory.astro';
+import InfrastructureStory from '@/components/home/InfrastructureStory.astro';
+import DuplexStory from '@/components/products/DuplexStory.astro';
+import CottageStory from '@/components/products/CottageStory.astro';
+import CommunityCare from '@/components/home/CommunityCare.astro';
+import ArchitectureStory from '@/components/home/ArchitectureStory.astro';
+import RealVillage from '@/components/home/RealVillage.astro';
+import ProjectGallery from '@/components/home/ProjectGallery.astro';
+import VisitLocation from '@/components/home/VisitLocation.astro';
+import VisitClosing from '@/components/home/VisitClosing.astro';
+import ViewingDialog from '@/components/viewing/ViewingDialog.astro';
+import { project } from '@/content/project';
+---
+<SiteDocument title="Stone Village — простір для життя біля Львова" description={project.description} noindex>
+  <SiteHeader />
+  <main id="main" tabindex="-1">
+    <HeroScene />
+    <VillageIntroduction />
+    <EnvironmentStory />
+    <InfrastructureStory />
+    <DuplexStory />
+    <CottageStory />
+    <CommunityCare />
+    <ArchitectureStory />
+    <RealVillage />
+    <ProjectGallery />
+    <VisitLocation />
+    <VisitClosing />
+  </main>
+  <SiteFooter />
+  <ViewingDialog />
+  <EditorialMotion />
+</SiteDocument>

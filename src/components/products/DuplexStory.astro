@@ -1,0 +1,23 @@
+---
+import { Image } from 'astro:assets';
+import terrace from '@/assets/products/duplex-terrace.jpg';
+---
+<section id="homes" class="duplex-story" aria-labelledby="duplex-title">
+ <article id="duplex-185">
+  <div class="duplex-copy">
+   <h2 id="duplex-title">Дуплекс<br /><span>185<small> м²</small></span></h2>
+   <p>Два поверхи, кабінет і тераса з виходом у двір. Ділянка — 4,5 сотки, поруч із будинком — два паркомісця.</p>
+   <a href="/duplex-185/">Детальніше про дуплекс <span aria-hidden="true">↗</span></a>
+  </div>
+  <figure data-image-reveal><Image src={terrace} alt="Візуалізація дуплекса Stone Village з боку власної тераси та озелененого подвір’я" widths={[640,960,1280,1680]} sizes="(max-width:767px) 100vw, 60vw" format="webp" loading="lazy"/></figure>
+ </article>
+</section>
+<style>
+ .duplex-story {background:var(--color-stone);padding:clamp(3rem,5vw,5rem) var(--gutter);}
+ article {max-width:100rem;margin:auto;display:grid;grid-template-columns:1fr 1.6fr;gap:5vw;align-items:center;}
+ h2 {font-size:clamp(2.5rem,4vw,4rem);font-weight:400;}h2>span {display:block;font-size:clamp(6rem,10vw,10rem);letter-spacing:-.06em;line-height:1.1;margin-top:.5rem;}small {font-size:1.6rem;letter-spacing:0;}
+ p {font-size:1rem;color:var(--color-muted);max-width:34ch;margin-top:1.75rem;line-height:1.7;}
+ a {display:inline-flex;align-items:center;justify-content:space-between;gap:2rem;min-height:48px;margin-top:1.5rem;border-bottom:1px solid currentColor;text-decoration:none;font-size:.95rem;}
+ figure img {width:100%;aspect-ratio:1.25;object-fit:cover;object-position:62% center;}
+ @media(max-width:767px){article {grid-template-columns:1fr;gap:1.75rem;}h2 {font-size:2.5rem;}h2>span {font-size:6rem;}p {max-width:40ch;margin-top:1.25rem;}a {margin-top:1rem;}figure {margin-inline:calc(-1 * var(--gutter));}figure img {aspect-ratio:1.2;}}
+</style>

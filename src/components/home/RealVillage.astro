@@ -1,0 +1,22 @@
+---
+import { Image } from 'astro:assets';
+import street from '@/assets/proof/street-april-2024.jpg';
+import facade from '@/assets/proof/facade-april-2024.jpg';
+---
+<section id="real-village" class="proof" aria-labelledby="proof-title">
+  <header><h2 id="proof-title">Будинки Stone Village</h2></header>
+  <div class="proof-scenes">
+    <figure class="street"><Image src={street} alt="Реальна фотографія будинків Stone Village уздовж внутрішньої вулиці під час будівництва, квітень 2024" widths={[480,800,1200,1680]} sizes="(max-width:767px) 100vw, 60vw" format="webp" loading="lazy"/></figure>
+    <div class="detail"><figure><Image src={facade} alt="Фасад дуплекса Stone Village на тлі лісу, фотографія будівельного майданчика, квітень 2024" widths={[480,800,1200]} sizes="(max-width:767px) 80vw, 30vw" format="webp" loading="lazy"/></figure></div>
+  </div>
+</section>
+<style>
+.proof {padding:clamp(3rem,5vw,5rem) var(--gutter);}
+header {margin-bottom:3rem;} .eyebrow {font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--color-muted);margin-bottom:1.5rem;} h2 {font-size:clamp(2.4rem,4.5vw,4.8rem);max-width:22ch;}
+.proof-scenes {display:grid;grid-template-columns:1.65fr 1fr;gap:clamp(2rem,6vw,7rem);align-items:start;}
+.street img {width:100%;aspect-ratio:1.05;object-fit:cover;object-position:center 65%;}
+.detail {padding-top:5rem;} .intro {font-size:clamp(1.1rem,1.7vw,1.5rem);margin-bottom:3rem;max-width:30ch;}
+.detail img {width:100%;aspect-ratio:1;object-fit:cover;object-position:center bottom;} figcaption {font-size:.7rem;color:var(--color-muted);margin-top:.8rem;}
+.proof-note {display:flex;justify-content:space-between;align-items:start;gap:2rem;border-top:1px solid var(--color-line);margin-top:3rem;padding-top:1.5rem;font-size:.8rem;color:var(--color-muted);} .proof-note p {max-width:65ch;} a {display:inline-flex;min-height:44px;align-items:center;white-space:nowrap;}
+@media(max-width:767px) {.proof-scenes {grid-template-columns:1fr;gap:2rem;} .street {margin-inline:calc(-1 * var(--gutter));} .street figcaption {margin-inline:var(--gutter);} .street img {aspect-ratio:.95;} .detail {padding-top:0;max-width:85%;margin-left:auto;} .intro {margin-bottom:1.5rem;font-size:1.1rem;} .proof-note {flex-direction:column;gap:.5rem;} }
+</style>

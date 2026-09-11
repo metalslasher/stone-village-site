@@ -1,0 +1,33 @@
+@import './fonts.css';
+@import './tokens.css';
+@import './reset.css';
+@import './typography.css';
+@import './layout.css';
+
+html { background: var(--color-paper); color: var(--color-ink); }
+body { min-inline-size: 20rem; }
+html:has(dialog[open]) { overflow: hidden; }
+a { color: inherit; text-underline-offset: 0.2em; }
+::selection { color: var(--color-surface); background: var(--color-accent); }
+:focus-visible { outline: 2px solid var(--color-focus); outline-offset: var(--focus-offset); }
+[id] { scroll-margin-block-start: 8rem; }
+.skip-link {
+  position: fixed;
+  inset-block-start: var(--space-4);
+  inset-inline-start: var(--gutter);
+  z-index: calc(var(--layer-dialog) + 1);
+  padding: var(--space-3) var(--space-4);
+  color: var(--color-ink);
+  background: var(--color-surface);
+  transform: translateY(-200%);
+  clip-path: inset(100%);
+}
+.skip-link:focus { transform: translateY(0); clip-path: none; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

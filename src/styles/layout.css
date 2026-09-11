@@ -1,0 +1,18 @@
+/* Alignment primitives only: no universal section padding or card geometry. */
+.page-width {
+  inline-size: min(calc(100% - 2 * var(--gutter)), var(--page-max));
+  margin-inline: auto;
+}
+.editorial-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--grid-gap);
+}
+.editorial-grid > * { min-inline-size: 0; }
+/* Baselines; each story may choose its own content-driven breakpoint. */
+@media (min-width: 48rem) {
+  .editorial-grid { grid-template-columns: repeat(8, minmax(0, 1fr)); }
+}
+@media (min-width: 75rem) {
+  .editorial-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+}

@@ -1,0 +1,80 @@
+---
+import BrandSignature from './BrandSignature.astro';
+import { project } from '@/content/project';
+interface Props { inner?: boolean; }
+const { inner = false } = Astro.props;
+const home = inner ? '/' : '';
+---
+<header class:list={["site-header", { "inner-header": inner }]}>
+  <a class="brand" href={home + "#home"} aria-label="Stone Village — головна">
+    <BrandSignature />
+  </a>
+  <nav aria-label="Головна навігація" class="desktop-nav">
+    <a href={home + "#about"}>Про містечко</a>
+    <a href={home + "#homes"}>Будинки</a>
+    <a href={home + "#infrastructure"}>Інфраструктура</a>
+    <a href={home + "#gallery"}>Галерея</a>
+    <a href={home + "#visit-location"}>Розташування</a>
+  </nav>
+  <button class="header-viewing" data-viewing-open>{project.primaryAction}<span aria-hidden="true">↗</span></button>
+  <button class="menu-trigger" aria-label="Відкрити меню" aria-haspopup="dialog" aria-controls="navigation-dialog"><span></span><span></span></button>
+</header>
+<dialog id="navigation-dialog" class="navigation-dialog" aria-labelledby="menu-title">
+  <div class="menu-top"><p id="menu-title">Stone Village</p><button data-menu-close aria-label="Закрити меню">✕</button></div>
+  <nav aria-label="Мобільна навігація">
+    <a href={home + "#about"}>Про містечко <span>01</span></a>
+    <a href={home + "#homes"}>Будинки <span>02</span></a>
+    <a href={home + "#infrastructure"}>Інфраструктура <span>03</span></a>
+    <a href={home + "#gallery"}>Галерея <span>04</span></a>
+    <a href={home + "#visit-location"}>Розташування <span>05</span></a>
+  </nav>
+  <button class="menu-viewing" data-viewing-open>{project.primaryAction} ↗</button>
+</dialog>
+<script>
+  const header = document.querySelector<HTMLElement>('.site-header')!;
+  const updateHeader = () => header.classList.toggle('is-scrolled', window.scrollY > 16);
+  updateHeader();
+  window.addEventListener('scroll', updateHeader, { passive: true });
+  window.addEventListener('pageshow', updateHeader);
+  const menu = document.querySelector<HTMLDialogElement>('#navigation-dialog')!;
+  const trigger = document.querySelector<HTMLButtonElement>('.menu-trigger')!;
+  trigger.addEventListener('click', () => menu.showModal());
+  menu.querySelector('[data-menu-close]')?.addEventListener('click', () => menu.close());
+  menu.querySelectorAll('a, [data-viewing-open]').forEach(link => link.addEventListener('click', () => menu.close()));
+</script>
+<style>
+  .site-header.inner-header {position:sticky;top:0;color:var(--color-ink);background:var(--color-paper);}
+  .inner-header .header-viewing {border-color:var(--color-line);}
+  .inner-header :focus-visible {outline-color:var(--color-focus);}
+  .inner-header .header-viewing:hover {background:var(--color-ink);color:var(--color-paper);}
+
+  .site-header { position: fixed; inset: 0 0 auto; z-index: var(--layer-header); display: flex; align-items: center; gap: 1.75rem; padding: 1.4rem var(--gutter); color: #fffdf8; }
+  .brand { margin-inline-end: auto; flex-shrink: 0; text-decoration:none; display:inline-flex; line-height:1; gap:.35rem; padding-block:.35rem; }
+  .brand-stone { font-size:.8rem; letter-spacing:.18em; }
+  .brand-village { font-size:1.8rem; letter-spacing:.16em; font-weight:500; }
+  .desktop-nav { display: flex; gap: 1.5rem; font-size: .8rem; }
+  .desktop-nav a { text-decoration: none; padding-block: 1rem; }
+  .desktop-nav a:hover { text-decoration: underline; }
+  .header-viewing { display: flex; align-items:center; gap: 1.5rem; padding: .85rem 1.25rem; background: none; border: 1px solid #ffffff80; font-size:.875rem; cursor:pointer; min-height:44px; }
+  .header-viewing:hover { background:#fffdf8; color:#302c27; }
+  .menu-trigger { display:none; background:none; border:0; padding:12px; width:44px; height:44px; cursor:pointer; }
+  .menu-trigger span { display:block; height:1px; background:currentColor; margin:6px 0; }
+  .site-header :focus-visible { outline-color: white; }
+  .navigation-dialog { border:0; margin:0; padding:1.5rem; max-width:none; max-height:none; width:100%; height:100dvh; background:var(--color-paper); color:var(--color-ink); }
+  .navigation-dialog::backdrop { background:#302c2780; }
+  .menu-top { display:flex; justify-content:space-between; align-items:center; }
+  .menu-top button { border:0; background:none; width:44px; height:44px; cursor:pointer; }
+  .navigation-dialog nav { display:grid; margin-block:2rem 2rem; }
+  .navigation-dialog nav a { display:flex; justify-content:space-between; gap:1rem; padding:1rem 0; border-bottom:1px solid var(--color-line); font-size:clamp(1.25rem,5vw,2rem); text-decoration:none; }
+  .navigation-dialog nav span { font-size:.875rem; }
+  .menu-viewing { background:var(--color-ink); color:var(--color-paper); border:0; padding:1.25rem; cursor:pointer; }
+  .menu-location { margin-top:2rem; color:var(--color-muted); font-size:.875rem; }
+  @media(max-width:74rem) { .desktop-nav { display:none; } .menu-trigger { display:block; } }
+  @media(max-width:40rem) { .site-header { padding-block:1rem; gap:1rem; } .brand-village { font-size:1.4rem; } .brand-stone { font-size:.65rem; } .header-viewing { display:none; } }
+
+  .site-header {transition:background-color 220ms ease,color 220ms ease;}
+  .site-header.is-scrolled {background:rgb(246 243 235 / 92%);color:var(--color-ink);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);}
+  .is-scrolled .header-viewing {border-color:var(--color-line);}
+  .site-header.is-scrolled :focus-visible {outline-color:var(--color-focus);}
+  .is-scrolled .header-viewing:hover {background:var(--color-ink);color:var(--color-paper);}
+</style>

@@ -1,0 +1,26 @@
+---
+import '@/styles/global.css';
+interface Props {
+  title: string;
+  description: string;
+  noindex?: boolean;
+}
+const { title, description, noindex = true } = Astro.props;
+---
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preload" href="/fonts/manrope-0.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <meta name="theme-color" content="#f5f2eb" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Перейти до вмісту</a>
+    <slot />
+  </body>
+</html>

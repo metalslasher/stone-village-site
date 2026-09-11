@@ -1,0 +1,105 @@
+---
+import { Image } from 'astro:assets';
+import winter from '@/assets/gallery/winter-street.jpg';
+import interior from '@/assets/gallery/living-room.jpg';
+import gardens from '@/assets/gallery/gardens.jpg';
+const scenes = [
+ {image:gardens,alt:'Візуалізація приватних подвір’їв Stone Village, терас та озеленення'},
+ {image:interior,alt:'Візуалізація інтер’єру: обідній стіл біля вікна та вітальня'},
+ {image:winter,alt:'Зимова візуалізація вулиці Stone Village з підсвіченими фасадами'},
+];
+---
+<section id="gallery" class="gallery" aria-labelledby="gallery-title">
+ <div class="gallery-stage">
+  <header><h2 id="gallery-title">Галерея</h2><div class="gallery-controls" hidden><span class="gallery-count" aria-hidden="true">01 / 03</span><button data-gallery-prev aria-label="Попередній кадр">←</button><button data-gallery-next aria-label="Наступний кадр">→</button></div></header>
+  <div class="gallery-window"><div class="gallery-track" tabindex="0" aria-label="Галерея: гортайте або використовуйте стрілки">{scenes.map(scene=><figure><Image src={scene.image} alt={scene.alt} widths={[480,800,1200,1680]} sizes="(max-width:767px) 85vw, 65vw" format="webp" loading="lazy"/></figure>)}</div></div>
+  <div class="gallery-progress" aria-hidden="true"><span></span></div>
+ </div>
+</section>
+<script>
+ const root=document.querySelector<HTMLElement>('#gallery')!;
+ const stage=root.querySelector<HTMLElement>('.gallery-stage')!;
+ const track=root.querySelector<HTMLElement>('.gallery-track')!;
+ const controls=root.querySelector<HTMLElement>('.gallery-controls')!;
+ const previous=controls.querySelector<HTMLButtonElement>('[data-gallery-prev]')!;
+ const next=controls.querySelector<HTMLButtonElement>('[data-gallery-next]')!;
+ const count=controls.querySelector<HTMLElement>('.gallery-count')!;
+ const bar=root.querySelector<HTMLElement>('.gallery-progress span')!;
+ const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+ const desktop=matchMedia('(min-width:1024px) and (min-height:650px) and (pointer:fine)');
+ const figures=Array.from(track.querySelectorAll('figure'));
+ let enhanced=false, distance=0, travel=0, start=0, position=0, scheduled=false, visible=false;
+ const clamp=(value:number)=>Math.max(0,Math.min(1,value));
+ const offsets=()=>figures.map(figure=>figure.offsetLeft-parseFloat(getComputedStyle(track).paddingLeft));
+ function paint(){
+   scheduled=false;
+   if(enhanced){
+     position=clamp((scrollY-start)/travel)*distance;
+     track.style.transform=`translate3d(${-position}px,0,0)`;
+   }else position=track.scrollLeft;
+   const max=enhanced?distance:track.scrollWidth-track.clientWidth;
+   previous.disabled=position<2; next.disabled=position>=max-2;
+   const stops=offsets();
+   const index=position>=max-2?figures.length-1:stops.reduce((best,offset,i)=>Math.abs(offset-position)<Math.abs(stops[best]!-position)?i:best,0);
+   count.textContent=`0${index+1} / 0${figures.length}`;
+   bar.style.transform=`scaleX(${max>0?clamp(position/max):1})`;
+ }
+ function schedule(){if(!scheduled){scheduled=true;requestAnimationFrame(paint);}}
+ function measure(){
+   enhanced=desktop.matches&&!reduced.matches;
+   root.classList.toggle('is-scroll-story',enhanced);
+   track.style.transform='';
+   root.style.height='';
+   if(enhanced){
+     track.scrollLeft=0;
+     const last=figures.at(-1)!;
+     distance=Math.max(0,last.offsetLeft+last.offsetWidth+parseFloat(getComputedStyle(track).paddingRight)-track.clientWidth);
+     travel=Math.max(1,distance*.8);
+     root.style.height=`${stage.offsetHeight+travel}px`;
+     start=root.getBoundingClientRect().top+scrollY;
+   }
+   paint();
+ }
+ function move(direction:number,keyboard=false){
+   const stops=offsets();
+   const target=direction>0?stops.find(x=>x>position+2):stops.findLast(x=>x<position-2);
+   const max=enhanced?distance:track.scrollWidth-track.clientWidth;
+   const destination=Math.max(0,Math.min(max,target??(direction>0?max:0)));
+   const behavior=keyboard||reduced.matches?'instant':'smooth';
+   if(enhanced)window.scrollTo({top:start+(destination/Math.max(1,distance))*travel,behavior});
+   else track.scrollTo({left:destination,behavior});
+ }
+ controls.hidden=false;
+ previous.addEventListener('click',()=>move(-1));next.addEventListener('click',()=>move(1));
+ track.addEventListener('keydown',event=>{
+   if(event.key==='ArrowRight'||event.key==='ArrowLeft'){event.preventDefault();move(event.key==='ArrowRight'?1:-1,true);}
+ });
+ track.addEventListener('scroll',()=>{if(!enhanced)schedule();},{passive:true});
+ addEventListener('scroll',()=>{if(enhanced&&visible)schedule();},{passive:true});
+ new IntersectionObserver(([entry])=>{visible=entry?.isIntersecting??false;if(visible)schedule();},{rootMargin:'100px'}).observe(root);
+ // Sections above have explicit media dimensions; resize and font loading can still change the start.
+ new ResizeObserver(measure).observe(document.body);
+ reduced.addEventListener('change',measure);desktop.addEventListener('change',measure);
+ document.fonts.ready.then(measure);
+ measure();
+</script>
+<style>
+ .gallery {padding:0;position:relative;}
+ .gallery-stage {padding:clamp(2.5rem,4vw,4rem) 0;}
+ header {display:flex;justify-content:space-between;align-items:center;gap:1rem;padding-inline:var(--gutter);margin-bottom:2rem;}
+ h2 {font-size:clamp(2.3rem,4vw,4.25rem);}
+ .gallery-controls {display:flex;gap:.5rem;align-items:center;}
+ .gallery-count {font-size:.75rem;margin-right:1.5rem;font-variant-numeric:tabular-nums;color:var(--color-muted);}
+ button {width:48px;height:48px;border:1px solid var(--color-line);background:none;cursor:pointer;} button:disabled {opacity:.35;cursor:default;}
+ .gallery-window {overflow:hidden;}
+ .gallery-track {display:flex;gap:24px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:var(--gutter);position:relative;padding-inline:var(--gutter);padding-bottom:1rem;scrollbar-width:thin;}
+ figure {overflow:hidden;flex:0 0 65vw;scroll-snap-align:start;}
+ figure img {width:100%;height:clamp(20rem,38vw,40rem);object-fit:cover;}
+ figure:nth-child(2) {flex-basis:30vw;}
+ .gallery-progress {height:1px;background:var(--color-line);margin:1.5rem var(--gutter) 0;overflow:hidden;}
+ .gallery-progress span {display:block;height:100%;background:var(--color-ink);transform:scaleX(0);transform-origin:left;}
+ .is-scroll-story .gallery-stage {position:sticky;top:0;height:100vh;display:flex;flex-direction:column;justify-content:center;}
+ .is-scroll-story .gallery-track {overflow:visible;scroll-snap-type:none;padding-bottom:0;}
+ .is-scroll-story figure img {height:min(65vh,720px);}
+ @media(max-width:767px){h2 {font-size:2rem;} .gallery-count {display:none;}figure,figure:nth-child(2) {flex-basis:85vw;}figure img {height:24rem;}.gallery-track {gap:16px;}}
+</style>

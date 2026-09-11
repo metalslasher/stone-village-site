@@ -1,0 +1,10 @@
+*, *::before, *::after { box-sizing: border-box; }
+body, h1, h2, h3, p, figure, dl, dd { margin: 0; }
+img, picture, video, svg { display: block; max-inline-size: 100%; }
+img, video { block-size: auto; }
+button, input, textarea, select { font: inherit; }
+button, input, textarea, select { min-inline-size: 0; }
+button { color: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; }
+textarea { resize: vertical; }
+[hidden] { display: none !important; }

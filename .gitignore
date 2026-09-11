@@ -1,0 +1,16 @@
+node_modules/
+dist/
+.astro/
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+.playwright-cli/
+output/playwright/
+
+# Local research and review artifacts (runtime media lives in src/assets and public)
+/output/
+/assets/
+/hero_reference.jpg
+/hero_video.mp4

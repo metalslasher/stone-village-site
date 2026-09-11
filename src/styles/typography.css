@@ -1,0 +1,18 @@
+body {
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  line-height: var(--leading-body);
+  font-optical-sizing: auto;
+}
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  line-height: var(--leading-heading);
+  text-wrap: balance;
+  overflow-wrap: break-word;
+}
+h1, .type-display { font-size: var(--type-display); letter-spacing: -0.035em; }
+h2, .type-heading { font-size: var(--type-heading); letter-spacing: -0.025em; }
+h3, .type-lead { font-size: var(--type-lead); }
+.type-caption { font-size: var(--type-caption); line-height: 1.45; }
+p { max-inline-size: var(--measure-body); overflow-wrap: break-word; }
