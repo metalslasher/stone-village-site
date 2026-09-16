@@ -6,7 +6,7 @@ import SiteFooter from '@/components/navigation/SiteFooter.astro';
 import ViewingDialog from '@/components/viewing/ViewingDialog.astro';
 import EditorialMotion from '@/components/home/EditorialMotion.astro';
 import ResidencePlan from '@/components/products/ResidencePlan.astro';
-import ResidenceViewing from '@/components/products/ResidenceViewing.astro';
+import ResidenceOffer from '@/components/products/ResidenceOffer.astro';
 import facade from '@/assets/architecture/duplex-facade.jpg';
 import terrace from '@/assets/products/duplex-terrace.jpg';
 import cottage from '@/assets/products/cottage-garden.jpg';
@@ -19,7 +19,7 @@ import '@/styles/residences.css';
  <main id="main" tabindex="-1" class="residence duplex-residence">
   <section class="duplex-opening" aria-labelledby="duplex-page-title">
    <div class="opening-copy"><a class="back-link" href="/#homes">← Усі будинки</a><h1 id="duplex-page-title">Дуплекс<br /><span>{duplex185.areaM2}<small> м²</small></span></h1><p>Для сім’ї, якій потрібні окремі кімнати, місце для роботи та вихід у власний двір.</p><button class="residence-cta" data-viewing-open>Записатись на перегляд <span aria-hidden="true">↗</span></button><a class="text-link" href="#planning">До планування <span aria-hidden="true">↓</span></a></div>
-   <figure><Image src={facade} alt="Візуалізація фасаду дуплекса Stone Village з панорамними вікнами та балконами" widths={[640,960,1400]} sizes="(max-width:767px) 100vw, 60vw" format="webp" loading="eager" fetchpriority="high"/></figure>
+   <figure><ResidenceOffer product="duplex-185" compact /><Image src={facade} alt="Візуалізація фасаду дуплекса Stone Village з панорамними вікнами та балконами" widths={[640,960,1400]} sizes="(max-width:767px) 100vw, 60vw" format="webp" loading="eager" fetchpriority="high"/></figure>
   </section>
   <dl class="residence-facts"><div><dt>Власна ділянка</dt><dd>4,5 <small>сотки</small></dd></div><div><dt>Поверхи</dt><dd>2</dd></div><div><dt>Паркомісця</dt><dd>2</dd></div></dl>
   <section class="terrace-story" aria-labelledby="terrace-title">
@@ -29,7 +29,7 @@ import '@/styles/residences.css';
   <ResidencePlan product="duplex-185" />
   <section class="residence-specs" aria-labelledby="specs-title"><header><h2 id="specs-title">Матеріали<br />й комплектація.</h2><p>Конструкція, інженерія та стан, у якому передається будинок.</p></header><dl>{construction.map(item=><div><dt>{item.title}</dt><dd>{item.text}</dd></div>)}</dl></section>
   <aside class="village-link"><p>Ліс, спільні простори й обслуговування території — частина життя у Stone Village.</p><a class="text-link" href="/#infrastructure">Про інфраструктуру містечка <span aria-hidden="true">↗</span></a></aside>
-  <ResidenceViewing />
+  <ResidenceOffer product="duplex-185" />
   <aside class="other-residence"><Image src={cottage} alt="Візуалізація окремого котеджу Stone Village" widths={[480,800]} sizes="(max-width:767px) 100vw, 30vw" format="webp" loading="lazy"/><div><p>Потрібен окремий будинок?</p><a href="/cottage-228/">Котедж 228 м² <span aria-hidden="true">↗</span></a></div></aside>
  </main>
  <SiteFooter inner /><ViewingDialog product="duplex-185" /><EditorialMotion />
@@ -38,7 +38,8 @@ import '@/styles/residences.css';
  .duplex-opening {display:grid;grid-template-columns:.8fr 1.2fr;gap:4vw;padding:1.5rem var(--gutter) 0;align-items:stretch;}
  .opening-copy {padding:1rem 0 2.5rem;}.back-link {display:inline-flex;align-items:center;min-height:44px;font-size:.75rem;text-decoration:none;color:var(--color-muted);margin-bottom:1.5rem;}
  h1 {font-size:clamp(2.6rem,4.5vw,5rem);font-weight:400;line-height:1.05;}h1>span {display:block;font-size:clamp(6rem,10vw,10.5rem);letter-spacing:-.07em;line-height:1.05;margin-top:.25rem;}h1 small {font-size:1.75rem;letter-spacing:0;}
- .opening-copy>p {font-size:1rem;color:var(--color-muted);max-width:32ch;margin:1.5rem 0;}
+ .opening-copy>.residence-cta {margin-top:1.5rem;}
+  .opening-copy>p {font-size:1rem;color:var(--color-muted);max-width:32ch;margin:1.5rem 0;}
  .opening-copy>.text-link {margin-top:.75rem;font-size:.85rem;}
  .duplex-opening figure {position:relative;min-height:570px;overflow:hidden;}.duplex-opening img {position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:65% center;}
  .terrace-story {display:grid;grid-template-columns:1.3fr 1fr;gap:5vw;padding:3rem var(--gutter) 4rem;align-items:center;}

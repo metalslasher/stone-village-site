@@ -1,0 +1,40 @@
+---
+import { offer, residenceOffer, formatUsd } from '@/content/offer';
+import type { ProductId } from '@/content/products';
+interface Props { product: ProductId; compact?: boolean; }
+const { product, compact = false } = Astro.props;
+const { product: house, savingUsd } = residenceOffer(product);
+---
+{compact ? (
+ <div class="offer-badge"><strong>−{offer.discountPerM2Usd} $</strong><span>на кожен м²</span></div>
+) : (
+ <section id="special-offer" class="residence-offer" aria-labelledby="offer-title">
+  <div class="offer-value">
+   <h2 id="offer-title">Знижка {offer.discountPerM2Usd} $<br /> на кожен м²</h2>
+   <p class="saving"><span>−{formatUsd(savingUsd)}</span><small>$</small></p>
+  </div>
+  <div class="offer-action">
+   <p>Огляньте будинок і планування. На перегляді обговоримо комплектацію та вартість з урахуванням акції.</p>
+   <button data-viewing-open data-offer="per-square-metre" data-offer-label={`Акція: −${formatUsd(savingUsd)} $ для ${house.areaM2} м²`}>Записатись на перегляд <span aria-hidden="true">↗</span></button>
+   <p class="offer-note">Остаточну вартість і умови придбання уточнюйте у відділі продажу.</p>
+  </div>
+
+ </section>
+)}
+<style>
+ .residence-offer {display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:3rem 7vw;padding:clamp(2.5rem,5vw,5rem) var(--gutter);background:var(--color-ink);color:var(--color-paper);}
+ h2 {font-size:clamp(2rem,3.5vw,3.6rem);font-weight:400;}
+ .saving {display:flex;align-items:baseline;gap:1rem;margin-top:2rem;line-height:1;white-space:nowrap;}
+ .saving>span {font-size:clamp(4rem,8vw,8.7rem);letter-spacing:-.06em;font-weight:300;}
+ .saving small {font-size:clamp(1.5rem,3vw,2.5rem);}
+ .offer-action {align-self:center;}
+ .offer-action>p {font-size:1.15rem;max-width:41ch;color:#e2dcd1;margin-top:1.25rem;}
+ button {display:flex;align-items:center;justify-content:space-between;gap:2rem;min-height:54px;margin-top:1.75rem;padding:1rem 1.25rem;border:0;background:var(--color-paper);color:var(--color-ink);cursor:pointer;font-size:.9rem;}
+ .offer-action>.offer-note {margin-top:1.25rem;font-size:.75rem;max-width:49ch;line-height:1.6;color:#c4bbae;}
+ .residence-offer :focus-visible {outline-color:var(--color-paper);}
+ @media(max-width:767px){.residence-offer {grid-template-columns:minmax(0,1fr);gap:1.5rem;}h2 {font-size:2rem;}.saving {margin-top:1.5rem;gap:.75rem;}.saving>span {font-size:clamp(3.7rem,15vw,6rem);}.offer-action>p {margin-top:0;font-size:1rem;}button {width:100%;gap:1rem;}}
+ .offer-badge {position:absolute;right:clamp(1rem,2vw,2rem);top:clamp(1rem,2vw,2rem);z-index:1;display:grid;gap:.3rem;padding:1rem 1.25rem;background:var(--color-paper);color:var(--color-ink);pointer-events:none;}
+ .offer-badge strong {font-size:clamp(1.8rem,3vw,3rem);font-weight:500;letter-spacing:-.04em;line-height:1;}
+ .offer-badge span {font-size:.85rem;}
+ @media(max-width:767px){.offer-badge {padding:.8rem 1rem;}.offer-badge strong {font-size:1.8rem;}.offer-badge span {font-size:.75rem;}}
+</style>

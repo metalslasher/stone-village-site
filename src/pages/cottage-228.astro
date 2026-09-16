@@ -6,7 +6,7 @@ import SiteFooter from '@/components/navigation/SiteFooter.astro';
 import ViewingDialog from '@/components/viewing/ViewingDialog.astro';
 import EditorialMotion from '@/components/home/EditorialMotion.astro';
 import ResidencePlan from '@/components/products/ResidencePlan.astro';
-import ResidenceViewing from '@/components/products/ResidenceViewing.astro';
+import ResidenceOffer from '@/components/products/ResidenceOffer.astro';
 import garden from '@/assets/products/cottage-garden.jpg';
 import duplex from '@/assets/products/duplex-terrace.jpg';
 import '@/styles/residences.css';
@@ -17,7 +17,7 @@ import '@/styles/residences.css';
   <section class="cottage-opening" aria-labelledby="cottage-page-title">
    <a class="back-link" href="/#homes">← Усі будинки</a>
    <header><h1 id="cottage-page-title">Окремий котедж</h1><p class="opening-area">228 <small>м²</small></p></header>
-   <figure><Image src={garden} alt="Візуалізація окремого котеджу Stone Village з терасою та варіантом облаштування приватного подвір’я" widths={[640,960,1280,1680]} sizes="100vw" format="webp" loading="eager" fetchpriority="high"/></figure>
+   <figure><ResidenceOffer product="cottage-228" compact /><Image src={garden} alt="Візуалізація окремого котеджу Stone Village з терасою та варіантом облаштування приватного подвір’я" widths={[640,960,1280,1680]} sizes="100vw" format="webp" loading="eager" fetchpriority="high"/></figure>
    <div class="cottage-intro"><p>Власний будинок без спільної стіни із сусідами. Простір для сім’ї всередині й особиста територія навколо.</p><button class="residence-cta" data-viewing-open>Записатись на перегляд <span aria-hidden="true">↗</span></button><a class="text-link" href="#planning">До планування <span aria-hidden="true">↓</span></a></div>
   </section>
   <dl class="residence-facts"><div><dt>Власна ділянка</dt><dd>6,94 <small>сотки</small></dd></div><div><dt>Поверхи</dt><dd>2</dd></div><div><dt>Криті паркомісця</dt><dd>2</dd></div></dl>
@@ -29,12 +29,13 @@ import '@/styles/residences.css';
    <div><dt>Оздоблення</dt><dd>Будинок передається з чорновим оздобленням. Інтер’єр ви плануєте під власні потреби.</dd></div>
   </dl></section>
   <aside class="village-link"><p>За межами власної ділянки — спільна інфраструктура й територія під доглядом керуючої компанії.</p><a class="text-link" href="/#care">Про безпеку й обслуговування <span aria-hidden="true">↗</span></a></aside>
-  <ResidenceViewing />
+  <ResidenceOffer product="cottage-228" />
   <aside class="other-residence"><Image src={duplex} alt="Візуалізація дуплекса Stone Village з боку тераси" widths={[480,800]} sizes="(max-width:767px) 100vw, 30vw" format="webp" loading="lazy"/><div><p>Порівняйте інший формат</p><a href="/duplex-185/">Дуплекс 185 м² <span aria-hidden="true">↗</span></a></div></aside>
  </main>
  <SiteFooter inner /><ViewingDialog product="cottage-228" /><EditorialMotion />
 </SiteDocument>
 <style>
+ .cottage-opening figure {position:relative;}
  .back-link {display:inline-flex;align-items:center;min-height:44px;font-size:.75rem;text-decoration:none;color:var(--color-muted);margin:1rem var(--gutter) 0;}
  .cottage-opening header {padding:1rem var(--gutter) 2rem;display:flex;justify-content:space-between;align-items:center;gap:2rem;}
  h1 {font-size:clamp(2.5rem,5vw,5.5rem);max-width:10ch;font-weight:400;}
