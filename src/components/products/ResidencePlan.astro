@@ -1,41 +1,84 @@
 ---
 import { floorplans } from '@/content/floorplans';
-import type { ProductId } from '@/content/products';
+import { productById, type ProductId } from '@/content/products';
 interface Props { product: ProductId; }
 const { product } = Astro.props;
 const floors = floorplans[product];
+const house = productById(product);
 ---
 <section id="planning" class="residence-plan" aria-labelledby="planning-title">
- <header><h2 id="planning-title">Планування</h2><div class="floor-switch" role="group" aria-label="Обрати поверх" hidden>{floors.map((_,i)=><button data-residence-floor={i} aria-pressed={i===0} aria-controls={`floor-${i}`}>{i+1} поверх</button>)}</div></header>
- {floors.map((floor,i)=><div id={`floor-${i}`} class="floor-layout" data-floor-panel={i}>
-  <figure><img src={`/media/plans/${product}-${i+1}.jpg`} width={floor.width} height={floor.height} alt={`План ${i+1}-го поверху ${product==='duplex-185'?'дуплекса 185 м²':'котеджу 228 м²'}`} loading="lazy"/><a href={`/media/plans/${product}-${i+1}.jpg`} target="_blank" rel="noopener">Відкрити план окремо <span aria-hidden="true">↗</span></a></figure>
-  <div class="floor-copy"><p class="floor-number">0{i+1} / Поверх</p><h3>{floor.title}</h3><p>{floor.text}</p><ul>{floor.rooms.map(room=><li>{room}</li>)}</ul><p class="plan-note">Варіант планування забудовника. Можливі зміни обговоримо на перегляді.</p></div>
- </div>)}
+  <header>
+    <div>
+      <p class="kicker">Планування</p>
+      <h2 id="planning-title">Два поверхи —<br />дві ролі.</h2>
+    </div>
+    <div class="floor-switch" role="group" aria-label="Обрати поверх" hidden>
+      {floors.map((_, i) => <button data-residence-floor={i} aria-pressed={i === 0 ? 'true' : 'false'} aria-controls={`floor-${i}`}>{i + 1} поверх</button>)}
+    </div>
+  </header>
+  {floors.map((floor, i) => (
+    <div id={`floor-${i}`} class="floor-layout" data-floor-panel={i}>
+      <figure>
+        <img src={`/media/plans/${product}-${i + 1}.jpg`} width={floor.width} height={floor.height} alt={`План ${i + 1}-го поверху: ${house.fullName.toLowerCase()}. ${floor.rooms.map(room => room.name + (room.area ? ` ${room.area} м²` : '')).join(', ')}`} loading="lazy" />
+        <a class="arrow-link" href={`/media/plans/${product}-${i + 1}.jpg`} target="_blank" rel="noopener">Відкрити план окремо <span aria-hidden="true">↗</span></a>
+      </figure>
+      <div class="floor-copy">
+        <p class="floor-number"><span class="numeral">0{i + 1}</span> / поверх{floor.total && <> · {floor.total} м²</>}</p>
+        <h3>{floor.title}</h3>
+        <p>{floor.text}</p>
+        <dl>{floor.rooms.map(room => <div><dt>{room.name}</dt><dd>{room.area ? <>{room.area} <small>м²</small></> : '—'}</dd></div>)}</dl>
+        <p class="plan-note">Варіант планування забудовника. Можливість вільного планування й зміни обговоримо на перегляді.</p>
+      </div>
+    </div>
+  ))}
 </section>
 <script>
- const root=document.querySelector<HTMLElement>('.residence-plan')!;
- const controls=root.querySelector<HTMLElement>('.floor-switch')!;
- const panels=root.querySelectorAll<HTMLElement>('[data-floor-panel]');
- const buttons=root.querySelectorAll<HTMLButtonElement>('[data-residence-floor]');
- const select=(index:string)=>{
-  panels.forEach(panel=>panel.hidden=panel.dataset.floorPanel!==index);
-  buttons.forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.residenceFloor===index)));
- };
- select('0');controls.hidden=false;
- buttons.forEach(button=>button.addEventListener('click',()=>select(button.dataset.residenceFloor!)));
+  const root = document.querySelector<HTMLElement>('.residence-plan')!;
+  const controls = root.querySelector<HTMLElement>('.floor-switch')!;
+  const panels = root.querySelectorAll<HTMLElement>('[data-floor-panel]');
+  const buttons = root.querySelectorAll<HTMLButtonElement>('[data-residence-floor]');
+  const select = (index: string) => {
+    panels.forEach(panel => panel.hidden = panel.dataset.floorPanel !== index);
+    buttons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.residenceFloor === index)));
+  };
+  select('0');
+  controls.hidden = false;
+  buttons.forEach(button => button.addEventListener('click', () => select(button.dataset.residenceFloor!)));
 </script>
 <style>
- .residence-plan {padding:clamp(3rem,5vw,5rem) var(--gutter);background:var(--color-stone);}
- header {display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:2rem;}
- h2 {font-size:clamp(2.3rem,4vw,4.25rem);}
- .floor-switch {display:flex;gap:.5rem;}button {min-height:48px;padding:.7rem 1.2rem;border:1px solid var(--color-line);background:transparent;cursor:pointer;font-size:.85rem;}button[aria-pressed=true] {background:var(--color-ink);color:var(--color-paper);border-color:var(--color-ink);}
- .floor-layout {display:grid;grid-template-columns:1.1fr 1fr;align-items:center;gap:6vw;}
- .floor-layout[hidden] {display:none;} figure {background:white;padding:1.5rem;display:flex;align-items:center;flex-direction:column;justify-content:center;min-height:650px;}
- img {max-width:100%;width:auto;max-height:570px;height:auto;object-fit:contain;}
- figure a {display:flex;gap:1.5rem;align-items:center;min-height:44px;font-size:.75rem;margin-top:1rem;text-decoration:none;}
- .floor-number {font-size:.75rem;color:var(--color-muted);margin-bottom:1.5rem;}h3 {font-size:clamp(1.6rem,2.5vw,2.7rem);max-width:22ch;}
- .floor-copy>p:not(.floor-number) {color:var(--color-muted);font-size:1rem;max-width:42ch;margin-top:1.5rem;}
- ul {list-style:none;padding:0;margin:2rem 0;}li {border-top:1px solid var(--color-line);padding:.75rem 0;font-size:.9rem;}
- .floor-copy>.plan-note {font-size:.75rem!important;}
- @media(max-width:767px){header {flex-wrap:wrap;} .floor-layout {grid-template-columns:1fr;gap:1.75rem;} figure {padding:1rem;min-height:570px;margin-inline:calc(-1 * var(--gutter));} img {max-height:480px;max-width:100%;} .floor-copy {max-width:none;} .floor-number {margin-bottom:.75rem;}h3 {font-size:1.8rem;}ul {margin:1.5rem 0;} }
+  .residence-plan { padding: var(--space-section) var(--gutter); background: var(--color-stone); }
+  header { display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem; margin-bottom: clamp(2rem, 4vw, 3.5rem); }
+  h2 { margin-top: 1.25rem; }
+  .floor-switch { display: flex; border: 1px solid var(--color-ink); }
+  button { min-height: 52px; padding: .75rem 1.5rem; border: 0; background: transparent; color: var(--color-ink); cursor: pointer; font-size: .9375rem; transition: background var(--duration-feedback), color var(--duration-feedback); }
+  button[aria-pressed='true'] { background: var(--color-ink); color: var(--color-paper); }
+  .floor-layout { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--grid-gap); align-items: center; }
+  .floor-layout:not([hidden]) { animation: floor-in 600ms var(--ease-settle); }
+  @keyframes floor-in { from { opacity: 0; transform: translateY(1rem); } }
+  .floor-layout[hidden] { display: none; }
+  figure { grid-column: 1 / span 6; background: #fff; padding: clamp(1.25rem, 3vw, 2.5rem); display: flex; align-items: center; flex-direction: column; justify-content: center; min-height: 640px; margin: 0; }
+  img { max-width: 100%; width: auto; max-height: 540px; height: auto; object-fit: contain; }
+  figure .arrow-link { margin-top: 1rem; font-size: .8125rem; }
+  .floor-copy { grid-column: 8 / span 5; }
+  .floor-number { font-size: .8125rem; color: var(--color-muted); letter-spacing: .04em; }
+  .floor-number .numeral { font-size: 2.25rem; color: var(--color-ink); margin-right: .25rem; }
+  h3 { font-size: clamp(1.75rem, 2.6vw, 2.75rem); margin: 1.25rem 0; max-width: 18ch; }
+  .floor-copy > p:not(.floor-number) { color: var(--color-muted); font-size: 1rem; max-width: 44ch; }
+  dl { margin: 2rem 0 1.5rem; }
+  dl div { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: .8rem 0; border-top: 1px solid var(--color-line); }
+  dl div:last-child { border-bottom: 1px solid var(--color-line); }
+  dt { font-size: .9688rem; }
+  dd { font-size: 1.25rem; letter-spacing: -.02em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  dd small { font-size: .75rem; color: var(--color-muted); }
+  .floor-copy > .plan-note { font-size: .8125rem !important; }
+  @media (max-width: 64rem) {
+    figure { grid-column: 1 / span 12; min-height: 0; }
+    .floor-copy { grid-column: 1 / span 12; margin-top: 1.5rem; }
+  }
+  @media (max-width: 48rem) {
+    header { flex-direction: column; align-items: stretch; }
+    .floor-switch button { flex: 1; }
+    figure { margin-inline: calc(-1 * var(--gutter)); }
+    img { max-height: 460px; }
+  }
 </style>

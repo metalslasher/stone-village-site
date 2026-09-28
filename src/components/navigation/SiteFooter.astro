@@ -1,13 +1,43 @@
 ---
 import BrandSignature from './BrandSignature.astro';
-import { salesContact } from '@/content/project';
+import { salesOffice } from '@/content/project';
+import { duplex185, cottage228 } from '@/content/products';
 interface Props { inner?: boolean; }
 const { inner = false } = Astro.props;
 const home = inner ? '/' : '';
 ---
-<footer><a href={home + "#home"} class="footer-brand" aria-label="Stone Village — на початок"><BrandSignature /></a><div><p>Відділ продажу</p><a href={salesContact.href}>{salesContact.label}</a></div><nav aria-label="Навігація внизу сторінки"><a href={home + "#homes"}>Будинки</a><a href={home + "#infrastructure"}>Інфраструктура</a><a href={home + "#gallery"}>Галерея</a><a href={home + "#visit-location"}>Розташування</a></nav><p class="copyright">© {new Date().getFullYear()} Stone Village · Stone Development</p></footer>
+<footer class="site-footer">
+  <a href={home + '#home'} class="footer-brand" aria-label="Stone Village — на початок"><BrandSignature /></a>
+  <div class="col">
+    <p class="label">Відділ продажу</p>
+    {salesOffice.phones.map(phone => <a class="phone" href={phone.href}>{phone.label}</a>)}
+    <p class="muted">{salesOffice.address}</p>
+  </div>
+  <nav class="col" aria-label="Будинки">
+    <p class="label">Будинки</p>
+    <a href={duplex185.href}>{duplex185.fullName}</a>
+    <a href={cottage228.href}>{cottage228.fullName}</a>
+  </nav>
+  <nav class="col" aria-label="Навігація внизу сторінки">
+    <p class="label">Містечко</p>
+    <a href={home + '#infrastructure'}>Інфраструктура</a>
+    <a href={home + '#gallery'}>Галерея</a>
+    <a href={home + '#location'}>Розташування</a>
+    <a href={home + '#faq'}>Питання</a>
+  </nav>
+  <p class="legal">© {new Date().getFullYear()} Stone Village · Stone Development. Зображення будинків і територій — візуалізації забудовника, якщо не зазначено інше; інтер’єри показують варіант оздоблення.</p>
+</footer>
 <style>
- footer { padding:3rem var(--gutter) 1.5rem; display:grid; grid-template-columns:1fr 1fr 1fr; gap:2rem; font-size:.875rem; } .footer-brand { align-self:start; text-decoration:none; letter-spacing:.1em; font-size:1.2rem; } footer nav { display:grid; } footer a { display:inline-flex; align-items:center; min-height:44px; } .copyright { grid-column:1/-1; font-size:.7rem; color:var(--color-muted); border-top:1px solid var(--color-line); padding-top:1.5rem; max-width:none; }
-
-@media(max-width:767px) { footer { grid-template-columns:1fr; } }
+  .site-footer { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 2.5rem var(--grid-gap); padding: clamp(3rem, 6vw, 5rem) var(--gutter) 1.5rem; background: var(--color-night); color: #fbf9f4; font-size: .9375rem; }
+  .footer-brand { align-self: start; text-decoration: none; display: inline-flex; }
+  .col { display: grid; align-content: start; gap: .1rem; }
+  .label { font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; color: var(--color-night-muted); margin-bottom: .75rem; }
+  .col a { display: inline-flex; align-items: center; min-height: 40px; text-decoration: none; width: fit-content; }
+  .col a:hover { text-decoration: underline; }
+  .phone { font-size: 1.25rem; letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
+  .muted { color: var(--color-night-muted); margin-top: .5rem; font-size: .875rem; }
+  .legal { grid-column: 1 / -1; font-size: .75rem; color: var(--color-night-muted); border-top: 1px solid var(--color-night-line); padding-top: 1.5rem; max-width: none; }
+  .site-footer :focus-visible { outline-color: #fff; }
+  @media (max-width: 64rem) { .site-footer { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 40rem) { .site-footer { grid-template-columns: 1fr 1fr; } .footer-brand, .site-footer > .col:nth-of-type(1) { grid-column: 1 / -1; } }
 </style>

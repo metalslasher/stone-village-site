@@ -1,18 +1,30 @@
 ---
-import { Image } from 'astro:assets';
-import winter from '@/assets/gallery/winter-street.jpg';
-import interior from '@/assets/gallery/living-room.jpg';
-import gardens from '@/assets/gallery/gardens.jpg';
+import { Image } from "astro:assets";
+import gardens from "@/assets/gallery/gardens.jpg";
+import winter from "@/assets/gallery/winter-street.jpg";
+import evening from "@/assets/products/cottage-evening.jpg";
+import livingRoom from "@/assets/interiors/living-room.jpg";
+import kitchen from "@/assets/interiors/kitchen.jpg";
+import street from "@/assets/environment/evening-street.jpg";
+import yard from "@/assets/products/cottage-yard.jpg";
+import stairs from "@/assets/interiors/living-stairs.jpg";
+// Developer visualizations; interiors show a design option — homes are handed over with rough finish.
 const scenes = [
- {image:gardens,alt:'Візуалізація приватних подвір’їв Stone Village, терас та озеленення'},
- {image:interior,alt:'Візуалізація інтер’єру: обідній стіл біля вікна та вітальня'},
- {image:winter,alt:'Зимова візуалізація вулиці Stone Village з підсвіченими фасадами'},
+ {image:gardens,alt:"Візуалізація забудовника: приватні подвір’я й тераси дуплексів Stone Village",shape:"wide"},
+ {image:livingRoom,alt:"Візуалізація варіанта інтер’єру: їдальня й вітальня біля вікна",shape:"tall"},
+ {image:evening,alt:"Візуалізація забудовника: окремий котедж Stone Village у вечірньому світлі",shape:"wide"},
+ {image:kitchen,alt:"Візуалізація варіанта інтер’єру: кухня з вікном у зелень",shape:"tall"},
+ {image:street,alt:"Візуалізація забудовника: вулиця Stone Village з двоповерховими будинками",shape:"wide"},
+ {image:stairs,alt:"Візуалізація варіанта інтер’єру: вітальня зі сходами на другий поверх",shape:"tall"},
+ {image:yard,alt:"Візуалізація забудовника: огороджений двір окремого котеджу з газоном",shape:"wide"},
+ {image:winter,alt:"Візуалізація забудовника: зимовий вечір на вулиці Stone Village",shape:"wide"},
 ];
+const total = String(scenes.length).padStart(2, "0");
 ---
 <section id="gallery" class="gallery" aria-labelledby="gallery-title">
  <div class="gallery-stage">
-  <header><h2 id="gallery-title">Галерея</h2><div class="gallery-controls" hidden><span class="gallery-count" aria-hidden="true">01 / 03</span><button data-gallery-prev aria-label="Попередній кадр">←</button><button data-gallery-next aria-label="Наступний кадр">→</button></div></header>
-  <div class="gallery-window"><div class="gallery-track" tabindex="0" aria-label="Галерея: гортайте або використовуйте стрілки">{scenes.map(scene=><figure><Image src={scene.image} alt={scene.alt} widths={[480,800,1200,1680]} sizes="(max-width:767px) 85vw, 65vw" format="webp" loading="lazy"/></figure>)}</div></div>
+  <header><div><p class="kicker">Галерея</p><h2 id="gallery-title">Як тут живеться</h2></div><div class="gallery-controls" hidden><span class="gallery-count" aria-hidden="true">01 / {total}</span><button data-gallery-prev aria-label="Попередній кадр">←</button><button data-gallery-next aria-label="Наступний кадр">→</button></div></header>
+  <div class="gallery-window"><div class="gallery-track" tabindex="0" aria-label="Галерея: гортайте або використовуйте стрілки">{scenes.map(scene=><figure class={scene.shape}><Image src={scene.image} alt={scene.alt} widths={[480,800,1200,1680]} sizes="(max-width:767px) 85vw, 65vw" format="webp" loading="lazy"/></figure>)}</div></div>
   <div class="gallery-progress" aria-hidden="true"><span></span></div>
  </div>
 </section>
@@ -41,7 +53,7 @@ const scenes = [
    previous.disabled=position<2; next.disabled=position>=max-2;
    const stops=offsets();
    const index=position>=max-2?figures.length-1:stops.reduce((best,offset,i)=>Math.abs(offset-position)<Math.abs(stops[best]!-position)?i:best,0);
-   count.textContent=`0${index+1} / 0${figures.length}`;
+   count.textContent=`${String(index+1).padStart(2,"0")} / ${String(figures.length).padStart(2,"0")}`;
    bar.style.transform=`scaleX(${max>0?clamp(position/max):1})`;
  }
  function schedule(){if(!scheduled){scheduled=true;requestAnimationFrame(paint);}}
@@ -84,22 +96,23 @@ const scenes = [
  measure();
 </script>
 <style>
- .gallery {padding:0;position:relative;}
- .gallery-stage {padding:clamp(2.5rem,4vw,4rem) 0;}
- header {display:flex;justify-content:space-between;align-items:center;gap:1rem;padding-inline:var(--gutter);margin-bottom:2rem;}
- h2 {font-size:clamp(2.3rem,4vw,4.25rem);}
+ .gallery {padding:0;position:relative;background:var(--color-paper);}
+ .gallery-stage {padding:var(--space-section) 0 clamp(2.5rem,4vw,4rem);}
+ header {display:flex;justify-content:space-between;align-items:end;gap:1rem;padding-inline:var(--gutter);margin-bottom:clamp(2rem,3vw,3rem);}
+ h2 {margin-top:1.25rem;}
  .gallery-controls {display:flex;gap:.5rem;align-items:center;}
- .gallery-count {font-size:.75rem;margin-right:1.5rem;font-variant-numeric:tabular-nums;color:var(--color-muted);}
- button {width:48px;height:48px;border:1px solid var(--color-line);background:none;cursor:pointer;} button:disabled {opacity:.35;cursor:default;}
+ .gallery-count {font-size:.8125rem;margin-right:1.5rem;font-variant-numeric:tabular-nums;color:var(--color-muted);}
+ button {width:52px;height:52px;border:1px solid var(--color-line);background:none;cursor:pointer;font-size:1.1rem;transition:background var(--duration-feedback),color var(--duration-feedback);} button:hover:not(:disabled) {background:var(--color-ink);color:var(--color-paper);border-color:var(--color-ink);} button:disabled {opacity:.35;cursor:default;}
  .gallery-window {overflow:hidden;}
- .gallery-track {display:flex;gap:24px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:var(--gutter);position:relative;padding-inline:var(--gutter);padding-bottom:1rem;scrollbar-width:thin;}
- figure {overflow:hidden;flex:0 0 65vw;scroll-snap-align:start;}
- figure img {width:100%;height:clamp(20rem,38vw,40rem);object-fit:cover;}
- figure:nth-child(2) {flex-basis:30vw;}
+ .gallery-track {display:flex;gap:clamp(12px,1.5vw,24px);align-items:flex-end;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:var(--gutter);position:relative;padding-inline:var(--gutter);padding-bottom:1rem;scrollbar-width:thin;}
+ figure {overflow:hidden;flex:0 0 auto;scroll-snap-align:start;margin:0;}
+ figure img {height:clamp(20rem,38vw,40rem);width:auto;object-fit:cover;}
+ figure.wide img {aspect-ratio:16/10;}
+ figure.tall img {aspect-ratio:3/4;}
  .gallery-progress {height:1px;background:var(--color-line);margin:1.5rem var(--gutter) 0;overflow:hidden;}
  .gallery-progress span {display:block;height:100%;background:var(--color-ink);transform:scaleX(0);transform-origin:left;}
- .is-scroll-story .gallery-stage {position:sticky;top:0;height:100vh;display:flex;flex-direction:column;justify-content:center;}
+ .is-scroll-story .gallery-stage {position:sticky;top:0;height:100vh;display:flex;flex-direction:column;justify-content:center;padding-block:5rem 2rem;}
  .is-scroll-story .gallery-track {overflow:visible;scroll-snap-type:none;padding-bottom:0;}
- .is-scroll-story figure img {height:min(65vh,720px);}
- @media(max-width:767px){h2 {font-size:2rem;} .gallery-count {display:none;}figure,figure:nth-child(2) {flex-basis:85vw;}figure img {height:24rem;}.gallery-track {gap:16px;}}
+ .is-scroll-story figure img {height:min(62vh,700px);}
+ @media(max-width:767px){.gallery-count {display:none;} button {width:44px;height:44px;} figure img {height:22rem;} figure.wide img {aspect-ratio:4/3;max-width:88vw;} figure.tall img {max-width:70vw;} .gallery-track {gap:12px;}}
 </style>

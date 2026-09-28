@@ -1,18 +1,9 @@
 # Component boundaries
 
-Create components when implementing the corresponding approved chapter. Do not add empty components or generic Card/Button/Section wrappers.
+- home/ — секції головної; кожна має власну композицію й scoped-стилі.
+- products/ — ResidencesStory (два формати на головній), ResidencePlan (перемикач поверхів), ResidenceOffer (акція та бейдж).
+- navigation/ — SiteHeader, SiteFooter, BrandSignature.
+- viewing/ — ViewingDialog (демо-форма без надсилання), MobileViewingBar.
+- motion/PageMotion — єдиний runtime руху: `data-reveal`, `data-progress` (sticky/pass/exit/enter → `--progress`), `data-count`.
 
-Planned groups:
-- navigation/: SiteHeader, MobileNavigation
-- home/: HeroScene, SpaceStatement, ForestAndCityStory, VillageIntroduction, DailyLifeStory, CareAndSafety, ArchitectureDetails, DeveloperNote
-- homes/: DuplexStory185 and CottageStory228 with separate compositions
-- plans/: ProductPlanPreview, PlanViewer
-- masterplan/: VillageMasterplan, MasterplanLegend
-- gallery/: RealVillageGallery, GalleryViewer
-- location/: LocationSection, LocationMap
-- viewing/: ViewingCTA, ViewingForm, ViewingDialog
-- media/: ResponsiveMedia, AmbientVideo
-
-Reuse functional behavior, not section geometry. Section styles stay scoped in their Astro files; global CSS owns tokens, typography, accessibility and alignment only.
-
-foundation/FoundationPreview.astro is a temporary local engineering specimen, not an approved homepage section. Replace the root page with the approved homepage during implementation; remove the specimen before launch.
+Глобально визначені лише токени, типографіка, `.cta`, `.arrow-link`, `.kicker`, `.numeral` і примітиви руху. Не додавати generic Card/Section-обгортки.

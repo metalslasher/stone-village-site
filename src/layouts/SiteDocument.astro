@@ -1,5 +1,6 @@
 ---
 import '@/styles/global.css';
+import PageMotion from '@/components/motion/PageMotion.astro';
 interface Props {
   title: string;
   description: string;
@@ -16,11 +17,18 @@ const { title, description, noindex = true } = Astro.props;
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="uk_UA" />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
-    <meta name="theme-color" content="#f5f2eb" />
+    <meta name="theme-color" content="#f4f0e8" />
+    <!-- Motion is opt-in: content stays visible without JS or with reduced motion. -->
+    <script is:inline>if(!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('motion');</script>
   </head>
   <body>
     <a class="skip-link" href="#main">Перейти до вмісту</a>
     <slot />
+    <PageMotion />
   </body>
 </html>

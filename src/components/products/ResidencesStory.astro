@@ -1,0 +1,154 @@
+---
+import { Image } from 'astro:assets';
+import terrace from '@/assets/products/duplex-terrace.jpg';
+import garden from '@/assets/products/cottage-garden.jpg';
+import { duplex185, cottage228 } from '@/content/products';
+import { offer, residenceOffer, formatUsd } from '@/content/offer';
+const duplexSaving = residenceOffer('duplex-185').savingUsd;
+const cottageSaving = residenceOffer('cottage-228').savingUsd;
+---
+<section id="homes" class="homes" aria-labelledby="homes-title">
+  <header class="homes-intro">
+    <p class="kicker">Будинки</p>
+    <h2 id="homes-title" data-reveal="lines"><span class="line-mask"><span>Два формати —</span></span><span class="line-mask"><span>два сценарії життя.</span></span></h2>
+    <p class="homes-lead" data-reveal>Дуплекс — розумний крок із квартири до власного дому. Котедж — повна незалежність і більше землі. В обох — ділянка, тераса й два паркомісця біля дверей.</p>
+  </header>
+
+  <article id="duplex-185" class="duplex" aria-labelledby="duplex-title">
+    <figure data-reveal="image">
+      <Image src={terrace} alt="Візуалізація забудовника: дуплекс Stone Village з терасою та власним подвір’ям" widths={[640, 960, 1280, 1680]} sizes="(max-width: 767px) 100vw, 58vw" format="webp" loading="lazy" />
+    </figure>
+    <div class="duplex-copy">
+      <p class="label">01 · Дуплекс</p>
+      <p class="area numeral" aria-hidden="true"><span data-count>{duplex185.areaM2}</span><small>м²</small></p>
+      <h3 id="duplex-title">Більше, ніж квартира. Простіше, ніж окремий дім.</h3>
+      <p class="text">Два поверхи з чітким зонуванням. Унизу — велика кухня-вітальня з виходом на терасу й у двір, нагорі — спальні, гардеробна й кабінет, де можна працювати за зачиненими дверима.</p>
+      <ul class="highlights">
+        {duplex185.highlights.map(item => <li><span class="numeral">{item.value}{item.unit && <small>{item.unit}</small>}</span><span>{item.text}</span></li>)}
+      </ul>
+      <p class="meta">Ділянка {String(duplex185.landSotkas).replace('.', ',')} сотки · 2 паркомісця</p>
+      <a class="arrow-link" href={duplex185.href}>Дивитися дуплекс і планування <span aria-hidden="true">→</span></a>
+    </div>
+  </article>
+
+  <article id="cottage-228" class="cottage" aria-labelledby="cottage-title">
+    <div class="cottage-visual" data-progress="pass">
+      <figure>
+        <Image src={garden} alt="Візуалізація забудовника: окремий котедж Stone Village з терасою та приватним двором; басейн — варіант облаштування ділянки" widths={[768, 1280, 1680]} sizes="100vw" format="webp" loading="lazy" />
+      </figure>
+      <p class="cottage-area numeral" aria-hidden="true"><span data-count>{cottage228.areaM2}</span><small>м²</small></p>
+    </div>
+    <div class="cottage-body">
+      <div class="cottage-copy">
+        <p class="label">02 · Окремий котедж</p>
+        <h3 id="cottage-title">Окремий дім. Жодної спільної стіни.</h3>
+        <p class="text">Для родини, якій потрібна повна незалежність: будинок на ділянці 6,94 сотки, дві тераси, критий паркінг на два авто й безпечна кімната, закладена в планування. У генплані містечка — лише {cottage228.masterplanCount} таких котеджів.</p>
+        <a class="arrow-link" href={cottage228.href}>Дивитися котедж і планування <span aria-hidden="true">→</span></a>
+      </div>
+      <ul class="highlights highlights--grid">
+        {cottage228.highlights.map((item, i) => <li data-reveal style={`--reveal-delay:${i * 80}ms`}><span class="numeral">{item.value}{item.unit && <small>{item.unit}</small>}</span><span>{item.text}</span></li>)}
+      </ul>
+    </div>
+  </article>
+
+  <aside id="offer" class="offer" aria-labelledby="offer-title">
+    <div class="offer-head">
+      <h2 id="offer-title">−{offer.discountPerM2Usd} $ на кожен&nbsp;м²</h2>
+    </div>
+    <dl class="offer-values">
+      <div><dt>Дуплекс {duplex185.areaM2} м²</dt><dd class="numeral">−{formatUsd(duplexSaving)}&nbsp;$</dd></div>
+      <div><dt>Котедж {cottage228.areaM2} м²</dt><dd class="numeral">−{formatUsd(cottageSaving)}&nbsp;$</dd></div>
+    </dl>
+    <div class="offer-action">
+      <button class="cta cta--light" data-viewing-open data-offer="per-square-metre" data-offer-label={`Акція: −${offer.discountPerM2Usd} $ на кожен м²`}>Записатись на перегляд <span aria-hidden="true">↗</span></button>
+      <p>Остаточну вартість і умови придбання уточнюйте у відділі продажу.</p>
+    </div>
+  </aside>
+</section>
+<style>
+  .homes { padding-top: var(--space-section); }
+  .homes-intro { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 1.5rem var(--grid-gap); align-items: end; padding-inline: var(--gutter); margin-bottom: clamp(3rem, 6vw, 6rem); }
+  .homes-intro .kicker { grid-column: 1 / -1; }
+  .homes-intro h2 { grid-column: 1 / span 7; }
+  .homes-lead { grid-column: 9 / span 4; color: var(--color-muted); font-size: 1.0625rem; }
+  .label { font-size: .8125rem; letter-spacing: .08em; text-transform: uppercase; color: var(--color-accent); }
+  .text { color: var(--color-muted); font-size: 1.0625rem; margin-top: 1.5rem; max-width: 44ch; }
+  .numeral small { font-size: max(.9rem, .18em); letter-spacing: 0; margin-left: .35rem; font-weight: 400; vertical-align: super; line-height: 0; }
+  .highlights { list-style: none; margin: 2.25rem 0 0; padding: 0; }
+  .highlights li { display: grid; grid-template-columns: 6.5rem 1fr; gap: 1.25rem; align-items: baseline; padding: 1rem 0; border-top: 1px solid var(--color-line); }
+  .highlights .numeral { font-size: 2.5rem; }
+  .highlights .numeral small { font-size: .8rem; vertical-align: baseline; }
+  .highlights li > span:last-child { font-size: .9688rem; color: var(--color-ink); }
+  .meta { margin-top: 1.5rem; font-size: .875rem; color: var(--color-muted); }
+  .arrow-link { margin-top: 1rem; }
+
+  .duplex { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--grid-gap); padding-inline: var(--gutter); align-items: start; }
+  .duplex figure { grid-column: 1 / span 7; position: sticky; top: 6rem; overflow: hidden; }
+  .duplex figure img { width: 100%; aspect-ratio: 4 / 4.4; object-fit: cover; object-position: 40% 50%; }
+  .duplex-copy { grid-column: 9 / span 4; padding-top: clamp(1rem, 4vw, 4rem); }
+  .area { font-size: clamp(6rem, 11vw, 11.5rem); margin: 1.25rem 0 1.75rem; }
+  .duplex h3 { font-size: clamp(1.75rem, 2.4vw, 2.5rem); line-height: 1.12; }
+
+  .cottage { margin-top: var(--space-section); }
+  .cottage-visual { --progress: .5; position: relative; overflow: hidden; }
+  .cottage-visual figure { overflow: hidden; height: clamp(26rem, 72vh, 52rem); margin: 0; }
+  .cottage-visual::after { content: ""; position: absolute; inset: 45% 0 0 35%; background: linear-gradient(200deg, transparent 20%, rgb(16 15 13 / 45%)); pointer-events: none; }
+  .cottage-area { z-index: 1; }
+  .cottage-visual img { width: 100%; height: 120%; object-fit: cover; object-position: 50% 55%; }
+  :global(.motion) .cottage-visual img { transform: translateY(calc(-8.3% + (var(--progress) - .5) * -14%)); }
+  .cottage-area { position: absolute; right: var(--gutter); bottom: 0; transform: translateY(16%); font-size: clamp(7rem, 19vw, 21rem); color: var(--color-paper); }
+  .cottage-body { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--grid-gap); padding: clamp(2rem, 4vw, 4rem) var(--gutter) 0; }
+  .cottage-copy { grid-column: 1 / span 5; }
+  .cottage h3 { font-size: clamp(2rem, 3.4vw, 3.5rem); line-height: 1.06; margin-top: 1.25rem; }
+  .highlights--grid { grid-column: 7 / span 6; display: grid; grid-template-columns: 1fr 1fr; gap: 0 var(--grid-gap); margin-top: clamp(7rem, 13vw, 14rem); }
+  .highlights--grid li { grid-template-columns: 1fr; gap: .5rem; padding-block: 1.25rem 1.75rem; }
+  .highlights--grid .numeral { font-size: clamp(3rem, 4.5vw, 4.5rem); }
+
+  .offer { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 2rem var(--grid-gap); align-items: end; margin: var(--space-section) var(--gutter) 0; padding: clamp(2.5rem, 5vw, 4.5rem); background: var(--color-accent); color: #fbf9f4; }
+  .offer-head { grid-column: 1 / span 5; }
+  .offer h2 { font-size: clamp(2.5rem, 4.6vw, 5rem); font-weight: 300; }
+  .offer-values { grid-column: 6 / span 4; display: grid; gap: 1rem; }
+  .offer-values div { display: flex; justify-content: space-between; align-items: baseline; gap: 1.5rem; border-top: 1px solid rgb(251 249 244 / 35%); padding-top: .9rem; }
+  .offer-values dt { font-size: .9375rem; color: #f1e6d6; }
+  .offer-values dd { font-size: clamp(1.9rem, 2.6vw, 2.75rem); white-space: nowrap; }
+  .offer-action { grid-column: 10 / span 3; }
+  .offer-action .cta { width: 100%; gap: 1rem; }
+  .offer-action p { font-size: .75rem; color: #f1e6d6; margin-top: 1rem; }
+  .offer :focus-visible { outline-color: #fff; }
+
+  @media (max-width: 75rem) {
+    .homes-intro h2 { grid-column: 1 / span 12; }
+    .homes-lead { grid-column: 1 / span 8; }
+    .duplex figure { grid-column: 1 / span 6; }
+    .duplex-copy { grid-column: 7 / span 6; }
+    .cottage-copy { grid-column: 1 / span 6; }
+    .highlights--grid { grid-column: 7 / span 6; }
+    .offer-head, .offer-values { grid-column: 1 / span 6; }
+    .offer-values { grid-column: 7 / span 6; }
+    .offer-action { grid-column: 1 / -1; display: flex; align-items: center; gap: 2rem; }
+    .offer-action .cta { width: auto; }
+    .offer-action p { margin: 0; }
+  }
+  @media (max-width: 48rem) {
+    .homes-intro, .duplex, .cottage-body, .offer { grid-template-columns: 1fr; }
+    .homes-intro > *, .duplex > *, .cottage-body > *, .offer > * { grid-column: 1 / -1 !important; }
+    .homes-lead { font-size: 1rem; }
+    .duplex figure { position: relative; top: 0; margin-inline: calc(-1 * var(--gutter)); }
+    .duplex figure img { aspect-ratio: 1 / 1.05; }
+    .duplex-copy { padding-top: .5rem; }
+    .area { font-size: clamp(5.5rem, 30vw, 8rem); margin-block: 1rem 1.25rem; }
+    .highlights li { grid-template-columns: 4.75rem 1fr; gap: 1rem; }
+    .highlights .numeral { font-size: 2.1rem; }
+    .cottage-visual figure { height: 30rem; }
+    .cottage-visual img { object-position: 38% 50%; }
+    .cottage-area { font-size: clamp(6rem, 34vw, 9rem); }
+    .highlights--grid { margin-top: 2rem; grid-template-columns: 1fr 1fr; gap: 0 1rem; }
+    .highlights--grid .numeral { font-size: 2.6rem; }
+    .highlights--grid li { grid-template-columns: 1fr; gap: .4rem; }
+    .highlights--grid li > span:last-child { font-size: .875rem; }
+    .offer { margin-inline: 0; padding: 2.5rem var(--gutter); }
+    .offer-action { display: block; }
+    .offer-action .cta { width: 100%; }
+    .offer-action p { margin-top: 1rem; }
+  }
+</style>

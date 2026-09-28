@@ -5,24 +5,108 @@
 @import './layout.css';
 
 html { background: var(--color-paper); color: var(--color-ink); }
-body { min-inline-size: 20rem; }
+body { min-inline-size: 20rem; background: var(--color-paper); overflow-x: clip; }
 html:has(dialog[open]) { overflow: hidden; }
 a { color: inherit; text-underline-offset: 0.2em; }
 ::selection { color: var(--color-surface); background: var(--color-accent); }
 :focus-visible { outline: 2px solid var(--color-focus); outline-offset: var(--focus-offset); }
-[id] { scroll-margin-block-start: 8rem; }
+[id] { scroll-margin-block-start: 5rem; }
 .skip-link {
   position: fixed;
-  inset-block-start: var(--space-4);
+  inset-block-start: 1rem;
   inset-inline-start: var(--gutter);
   z-index: calc(var(--layer-dialog) + 1);
-  padding: var(--space-3) var(--space-4);
+  padding: 0.75rem 1rem;
   color: var(--color-ink);
   background: var(--color-surface);
   transform: translateY(-200%);
   clip-path: inset(100%);
 }
 .skip-link:focus { transform: translateY(0); clip-path: none; }
+
+/* Primary action. One visual language for «Записатись на перегляд» across the site. */
+.cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2.5rem;
+  min-block-size: 3.5rem;
+  padding: 1rem 1.4rem;
+  border: 1px solid var(--color-ink);
+  background: var(--color-ink);
+  color: var(--color-paper);
+  font-size: 0.9375rem;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background var(--duration-feedback), color var(--duration-feedback), border-color var(--duration-feedback);
+}
+.cta:hover { background: var(--color-accent-hover); border-color: var(--color-accent-hover); }
+.cta--light { background: var(--color-paper); color: var(--color-ink); border-color: var(--color-paper); }
+.cta--light:hover { background: #fff; border-color: #fff; color: var(--color-ink); }
+.cta > span[aria-hidden] { font-size: 1.1em; transition: transform 260ms var(--ease-settle); }
+@media (hover: hover) and (pointer: fine) {
+  .cta:hover > span[aria-hidden] { transform: translate(3px, -3px); }
+}
+
+/* Secondary text action with an underline that draws on hover. */
+.arrow-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 1.25rem;
+  min-block-size: var(--touch-target);
+  padding-block: 0.5rem;
+  font-size: 0.9375rem;
+  text-decoration: none;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.arrow-link::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0.35rem;
+  block-size: 1px;
+  background: currentColor;
+  opacity: 0.35;
+}
+.arrow-link::before {
+  content: '';
+  position: absolute;
+  inset: auto 0 0.35rem;
+  block-size: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 420ms var(--ease-settle);
+  z-index: 1;
+}
+.arrow-link:hover::before { transform: scaleX(1); }
+.arrow-link > span[aria-hidden] { transition: transform 260ms var(--ease-settle); }
+.arrow-link:hover > span[aria-hidden] { transform: translateX(4px); }
+
+/* Motion primitives, enabled only when the page script marks JS + motion as available. */
+.motion [data-reveal] {
+  opacity: 0;
+  transform: translateY(2rem);
+  transition: opacity var(--duration-reveal) var(--ease-settle), transform var(--duration-reveal) var(--ease-settle);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.motion [data-reveal].is-visible { opacity: 1; transform: none; }
+.motion [data-reveal='image'] { opacity: 1; transform: none; clip-path: inset(12% 8% 12% 8%); transition: clip-path 1.3s var(--ease-cinema); }
+.motion [data-reveal='image'] img { transform: scale(1.12); transition: transform 1.6s var(--ease-cinema); }
+.motion [data-reveal='image'].is-visible { clip-path: inset(0); }
+.motion [data-reveal='image'].is-visible img { transform: none; }
+.line-mask { display: block; overflow: hidden; padding-block-end: 0.08em; margin-block-end: -0.08em; }
+.line-mask > span { display: block; }
+.motion [data-reveal='lines'] { opacity: 1; transform: none; }
+.motion [data-reveal='lines'] .line-mask > span { transform: translateY(105%); transition: transform 1.1s var(--ease-settle); }
+.motion [data-reveal='lines'] .line-mask:nth-child(2) > span { transition-delay: 90ms; }
+.motion [data-reveal='lines'] .line-mask:nth-child(3) > span { transition-delay: 180ms; }
+.motion [data-reveal='lines'].is-visible .line-mask > span { transform: none; }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

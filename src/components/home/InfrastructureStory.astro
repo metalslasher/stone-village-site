@@ -1,69 +1,99 @@
 ---
-import { Image } from 'astro:assets';
-import sharedSpaces from '@/assets/infrastructure/shared-spaces.jpg';
+import { Image, getImage } from 'astro:assets';
 import { infrastructure } from '@/content/infrastructure';
+const { chapters } = infrastructure;
+const lens = await getImage({ src: infrastructure.image, width: 1280, format: 'webp' });
 ---
-<section id="infrastructure" class="infrastructure-story" aria-labelledby="infrastructure-title">
-  <header class="infrastructure-heading">
-    
-    <div class="heading-copy">
-      <h2 id="infrastructure-title">Для роботи,<br />спорту й відпочинку.</h2>
-      <p>Майданчики для дітей, тренування для дорослих і місця, де можна зосередитися на роботі.</p>
-    </div>
+<section id="infrastructure" class="infrastructure" aria-labelledby="infrastructure-title" data-active="0">
+  <header class="intro">
+    <p class="kicker">Інфраструктура</p>
+    <h2 id="infrastructure-title" data-reveal="lines"><span class="line-mask"><span>Щоденне життя —</span></span><span class="line-mask"><span>в межах містечка.</span></span></h2>
+    <p class="lead" data-reveal>Садочок, спорт, робоче місце й кава поруч із домом. Менше поїздок — більше часу для своїх.</p>
   </header>
-  <figure class="entrance-scene" data-image-reveal>
-    <Image src={sharedSpaces} alt="Візуалізація спортивного поля, дитячого майданчика та спільних просторів Stone Village" widths={[640, 960, 1280, 1680]} sizes="(max-width: 767px) 100vw, 92vw" format="webp" loading="lazy" />
-    
-  </figure>
-  <div class="daily-life">
-    
-    <div class="chapters">
-      {infrastructure.chapters.map((chapter, index) => (
-        <article class="daily-chapter">
-          <span class="chapter-number" aria-hidden="true">0{index + 1}</span>
+  <div class="scene">
+    <figure class="camera" aria-hidden="true">
+      <Image src={infrastructure.image} alt="" widths={[960, 1400, 1680]} sizes="(max-width: 767px) 100vw, 58vw" format="webp" loading="lazy" />
+    </figure>
+    <ol class="chapters">
+      {chapters.map((chapter, i) => (
+        <li data-chapter={i} data-focus={chapter.focus} data-zoom={chapter.scale} style={`--focus:${chapter.focus};--zoom:${chapter.scale}`}>
+          <div class="lens" style={`background-image:url(${lens.src})`} aria-hidden="true"></div>
+          <span class="index">0{i + 1}</span>
           <h3>{chapter.title}</h3>
-          <div class="chapter-copy">
-            <p>{chapter.description}</p>
-          </div>
-        </article>
+          <p>{chapter.text}</p>
+        </li>
       ))}
-    </div>
+    </ol>
   </div>
+  <p class="visually-hidden">{infrastructure.alt}</p>
 </section>
+<script>
+  const section = document.querySelector<HTMLElement>("#infrastructure")!;
+  const camera = section.querySelector<HTMLElement>(".camera")!;
+  const img = camera.querySelector<HTMLImageElement>("img")!;
+  const items = Array.from(section.querySelectorAll<HTMLElement>("[data-chapter]"));
+  let current = items[0]!;
+  // Frame the focus point (percent of the full picture) at the requested zoom,
+  // clamped so the picture always covers the frame. Only transform animates.
+  const frame = () => {
+    const w = camera.clientWidth, h = camera.clientHeight;
+    if (!w || !h) return;
+    const ratio = (img.naturalWidth || 1680) / (img.naturalHeight || 972);
+    const coverW = Math.max(w, h * ratio), coverH = coverW / ratio;
+    img.style.width = coverW + "px";
+    img.style.height = coverH + "px";
+    const [fx, fy] = (current.dataset.focus ?? "50% 50%").split(" ").map(v => parseFloat(v) / 100);
+    const zoom = parseFloat(current.dataset.zoom ?? "1");
+    const clamp = (v: number, min: number) => Math.min(0, Math.max(min, v));
+    const x = clamp(w / 2 - fx! * coverW * zoom, w - coverW * zoom);
+    const y = clamp(h / 2 - fy! * coverH * zoom, h - coverH * zoom);
+    img.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${zoom})`;
+  };
+  const activate = (item: HTMLElement) => {
+    current = item;
+    items.forEach(el => el.classList.toggle("is-active", el === item));
+    frame();
+  };
+  activate(current);
+  img.addEventListener("load", frame);
+  new ResizeObserver(frame).observe(camera);
+  // The chapter crossing the middle band of the viewport drives the camera.
+  const observer = new IntersectionObserver(entries => {
+    for (const entry of entries) if (entry.isIntersecting) activate(entry.target as HTMLElement);
+  }, { rootMargin: "-45% 0px -45% 0px" });
+  items.forEach(item => observer.observe(item));
+</script>
 <style>
-  .infrastructure-story { max-width:var(--page-max); margin-inline:auto; padding:clamp(3rem,5vw,5rem) var(--gutter) clamp(3rem,5vw,5rem); }
-  .chapter-label { font-size:.75rem; letter-spacing:.1em; text-transform:uppercase; color:var(--color-muted); }
-  .infrastructure-heading > .chapter-label { margin-bottom:2rem; }
-  .heading-copy { display:flex; align-items:end; justify-content:space-between; gap:4rem; }
-  h2 { font-size:clamp(2.5rem,4.6vw,5rem); max-width:22ch; }
-  .heading-copy > p { max-width:34ch; padding-bottom:.25rem; color:var(--color-muted); }
-  .entrance-scene { margin-top:clamp(2.5rem,4vw,4.5rem); }
-  .entrance-scene img { width:100%; height:auto; aspect-ratio:2.05; object-fit:cover; object-position:50% 58%; }
-
-  .daily-life { margin-top:clamp(1.5rem,2.5vw,2.5rem); display:grid; grid-template-columns:1fr; gap:3rem; }
-  .daily-label { padding-top:1.75rem; }
-  .daily-chapter { display:grid; grid-template-columns:2rem 1fr 1.25fr; gap:1.5rem; padding:1.4rem 0; border-top:1px solid var(--color-line); }
-  .chapter-number { font-size:.75rem; color:var(--color-muted); padding-top:.25rem; }
-  h3 { font-size:clamp(1.35rem,1.9vw,2rem); letter-spacing:-.02em; line-height:1.2; max-width:17ch; }
-  .chapter-copy > p:first-child { color:var(--color-muted); font-size:1rem; }
-  .chapter-detail { font-size:.75rem; line-height:1.65; margin-top:.6rem; }
-  @media(max-width:1100px) {
-    .daily-life { grid-template-columns:1fr; gap:1.5rem; }
-    .daily-label { padding-top:0; }
-    .heading-copy { gap:2rem; }
-    .heading-copy > p { max-width:29ch; }
+  .infrastructure { padding-block: var(--space-section); background: var(--color-stone); }
+  .intro { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 1.5rem var(--grid-gap); align-items: end; padding-inline: var(--gutter); margin-bottom: clamp(2.5rem, 5vw, 5rem); }
+  .intro .kicker { grid-column: 1 / -1; }
+  .intro h2 { grid-column: 1 / span 7; }
+  .lead { grid-column: 9 / span 4; color: var(--color-muted); font-size: 1.0625rem; }
+  .scene { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--grid-gap); padding-inline: var(--gutter); }
+  .camera { grid-column: 1 / span 7; position: sticky; top: 12vh; height: 76vh; overflow: hidden; margin: 0; background: #cfd3c6; }
+  .camera img { position: absolute; left: 0; top: 0; width: 100%; height: 100%; max-width: none; object-fit: cover; transform-origin: 0 0; transition: transform 1.4s var(--ease-cinema); will-change: transform; }
+  .chapters { grid-column: 9 / span 4; list-style: none; margin: 0; padding: 0; }
+  .chapters li { min-height: 76vh; display: flex; flex-direction: column; justify-content: center; border-top: 1px solid var(--color-line); opacity: .35; transition: opacity 600ms var(--ease-settle); }
+  .chapters li:first-child { border-top: 0; }
+  .chapters li.is-active { opacity: 1; }
+  .index { font-size: .8125rem; letter-spacing: .12em; color: var(--color-accent); }
+  h3 { font-size: clamp(2rem, 3vw, 3.25rem); margin: 1rem 0 1.25rem; }
+  .chapters p { color: var(--color-muted); font-size: 1.0625rem; max-width: 36ch; }
+  .lens { display: none; }
+  .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  @media (max-width: 64rem) {
+    .intro h2 { grid-column: 1 / -1; }
+    .lead { grid-column: 1 / span 9; }
+    .scene { display: block; }
+    .camera { display: none; }
+    .chapters li { min-height: 0; opacity: 1; padding: 2rem 0 2.5rem; border-top: 0; }
+    .lens { display: block; aspect-ratio: 4 / 3; margin: 0 calc(-1 * var(--gutter)) 1.5rem; background-size: calc(var(--zoom) * 100%) auto; background-position: var(--focus); background-repeat: no-repeat; background-color: #cfd3c6; }
+    .chapters li:last-child .lens { background-size: cover; background-position: center; }
   }
-  @media(max-width:767px) {
-    .heading-copy { display:block; }
-    h2 { font-size:clamp(2.2rem,7.6vw,3.5rem); }
-    .heading-copy > p { margin-top:1.5rem; max-width:45ch; }
-    .entrance-scene { margin-inline:calc(-1 * var(--gutter)); }
-    .entrance-scene img { aspect-ratio:1.15; object-position:61% center; }
-
-    .daily-chapter { grid-template-columns:1.5rem 1fr; gap:.75rem; padding-block:1.75rem; }
-    h3 { max-width:none; font-size:1.5rem; }
-    .chapter-copy { grid-column:2; }
-    .chapter-copy > p:first-child { font-size:.9375rem; }
-    .chapter-detail { margin-top:1rem; }
+  @media (max-width: 48rem) {
+    .intro, .lead { display: block; }
+    .intro h2 { margin-top: 1.25rem; }
+    .lead { margin-top: 1.25rem; font-size: 1rem; }
+    .lens { aspect-ratio: 1 / 1; background-size: calc(var(--zoom) * 180%) auto; }
   }
 </style>

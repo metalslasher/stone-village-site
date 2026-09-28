@@ -1,0 +1,42 @@
+---
+import { faq } from '@/content/faq';
+---
+<section id="faq" class="faq" aria-labelledby="faq-title">
+  <div class="faq-head">
+    <p class="kicker">Питання</p>
+    <h2 id="faq-title" data-reveal="lines"><span class="line-mask"><span>Перед тим,</span></span><span class="line-mask"><span>як приїхати.</span></span></h2>
+  </div>
+  <div class="faq-list">
+    {faq.map((item, i) => (
+      <details name="faq" open={i === 0}>
+        <summary><span>{item.q}</span><span class="icon" aria-hidden="true"></span></summary>
+        <p>{item.a}</p>
+      </details>
+    ))}
+  </div>
+</section>
+<style>
+  .faq { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--grid-gap); padding: var(--space-section) var(--gutter); }
+  .faq-head { grid-column: 1 / span 4; }
+  h2 { margin-top: 1.25rem; font-size: clamp(2.25rem, 1.2rem + 3vw, 4.25rem); }
+  .faq-list { grid-column: 6 / span 7; border-top: 1px solid var(--color-line); }
+  details { border-bottom: 1px solid var(--color-line); }
+  summary { display: flex; justify-content: space-between; align-items: center; gap: 2rem; min-height: 4.5rem; padding: 1.25rem 0; cursor: pointer; list-style: none; font-size: clamp(1.125rem, 1.5vw, 1.4rem); letter-spacing: -.015em; }
+  summary::-webkit-details-marker { display: none; }
+  summary:hover > span:first-child { color: var(--color-accent); }
+  .icon { position: relative; flex: 0 0 1rem; height: 1rem; }
+  .icon::before, .icon::after { content: ''; position: absolute; left: 0; right: 0; top: 50%; height: 1.5px; background: currentColor; transition: transform 400ms var(--ease-settle); }
+  .icon::after { transform: rotate(90deg); }
+  details[open] .icon::after { transform: rotate(0deg); }
+  details p { padding: 0 3rem 1.75rem 0; color: var(--color-muted); font-size: 1.0625rem; max-width: 60ch; }
+  details[open] p { animation: faq-in 500ms var(--ease-settle); }
+  @keyframes faq-in { from { opacity: 0; transform: translateY(-.5rem); } }
+  @media (max-width: 64rem) {
+    .faq-head, .faq-list { grid-column: 1 / -1; }
+    .faq-list { margin-top: 2rem; }
+  }
+  @media (max-width: 48rem) {
+    summary { font-size: 1.0625rem; gap: 1rem; }
+    details p { padding-right: 0; font-size: 1rem; }
+  }
+</style>

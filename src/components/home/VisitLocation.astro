@@ -1,52 +1,79 @@
 ---
 import { location, nearbyRoutes } from '@/content/location';
+const longest = Math.max(...nearbyRoutes.map(route => route.minutes));
 ---
-<section id="visit-location" class="visit-location" aria-labelledby="visit-location-title">
+<section id="location" class="location" aria-labelledby="location-title">
   <header>
-    <div><h2 id="visit-location-title">Львів — у звичному<br />маршруті.</h2><p class="address">{location.address}, Львівська область</p></div>
-    <p class="distance"><span>2,5</span><span>км<br />від Львова</span></p>
+    <div>
+      <p class="kicker">Розташування</p>
+      <h2 id="location-title" data-reveal="lines"><span class="line-mask"><span>Львів — у звичному</span></span><span class="line-mask"><span>маршруті.</span></span></h2>
+      <p class="address">{location.address}, Львівська область</p>
+    </div>
+    <p class="distance" data-reveal><span class="numeral"><span data-count>2,5</span></span><span>км<br />від Львова</span></p>
   </header>
-  <div class="route-heading"><h3>Щоденні маршрути й дозвілля</h3></div>
-  <dl class="routes">{nearbyRoutes.map(route=><div class="route-stop"><dt>{route.title}</dt><dd><span>{route.minutes}</span> хв</dd></div>)}</dl>
+  <p class="lead" data-reveal>Школа, супермаркет і METRO — за кілька хвилин, центр міста — в межах пів години. Офіс, зустрічі, театр увечері — місто залишається частиною вашого тижня.</p>
+  <ol class="routes" data-progress="pass" style={`--max:${longest}`}>
+    {nearbyRoutes.map(route => (
+      <li style={`--m:${route.minutes}`}>
+        <span class="bar" aria-hidden="true"></span>
+        <span class="name">{route.title}</span>
+        <span class="time"><span class="numeral">{route.minutes}</span> хв</span>
+      </li>
+    ))}
+  </ol>
   <div class="route-actions">
-    <p>Орієнтири з презентації проєкту. Час залежить від способу пересування та дорожньої ситуації.</p>
-    <div><button class="map-toggle" aria-expanded="false" aria-controls="location-map" hidden>Показати карту <span aria-hidden="true">+</span></button><a href={location.directionsUrl} target="_blank" rel="noopener noreferrer">Прокласти маршрут <span aria-hidden="true">↗</span></a></div>
+    <p>Орієнтовний час з презентації проєкту. Залежить від транспорту та дорожньої ситуації.</p>
+    <div>
+      <button class="arrow-link map-toggle" aria-expanded="false" aria-controls="location-map" hidden>Показати карту <span aria-hidden="true">+</span></button>
+      <a class="arrow-link" href={location.directionsUrl} target="_blank" rel="noopener noreferrer">Прокласти маршрут <span aria-hidden="true">↗</span></a>
+    </div>
   </div>
   <div id="location-map" hidden><iframe title="Розташування Stone Village, Конопниця" data-src={location.embedUrl} loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
 </section>
 <script>
- const toggle=document.querySelector<HTMLButtonElement>('.map-toggle')!;
- const map=document.querySelector<HTMLElement>('#location-map')!;
- toggle.hidden=false;
- toggle.addEventListener('click',()=>{
-   const open=toggle.getAttribute('aria-expanded')!=='true';
-   toggle.setAttribute('aria-expanded',String(open));map.hidden=!open;
-   toggle.innerHTML=open?'Сховати карту <span aria-hidden="true">−</span>':'Показати карту <span aria-hidden="true">+</span>';
-   const frame=map.querySelector('iframe')!;
-   if(open&&!frame.hasAttribute('src'))frame.src=frame.dataset.src!;
- });
+  const toggle = document.querySelector<HTMLButtonElement>('.map-toggle')!;
+  const map = document.querySelector<HTMLElement>('#location-map')!;
+  toggle.hidden = false;
+  toggle.addEventListener('click', () => {
+    const open = toggle.getAttribute('aria-expanded') !== 'true';
+    toggle.setAttribute('aria-expanded', String(open));
+    map.hidden = !open;
+    toggle.innerHTML = open ? 'Сховати карту <span aria-hidden="true">−</span>' : 'Показати карту <span aria-hidden="true">+</span>';
+    const frame = map.querySelector('iframe')!;
+    if (open && !frame.hasAttribute('src')) frame.src = frame.dataset.src!;
+  });
 </script>
 <style>
- .visit-location {padding:clamp(3rem,5vw,5.5rem) var(--gutter);background:var(--color-stone);}
- header {display:flex;align-items:center;justify-content:space-between;gap:3rem;}
- h2 {font-size:clamp(2.3rem,4.3vw,4.7rem);}
- .address {font-size:.9rem;color:var(--color-muted);margin-top:1.5rem;}
- .distance {display:flex;align-items:center;gap:1.2rem;white-space:nowrap;}
- .distance>span:first-child {font-size:clamp(6rem,12vw,12rem);font-weight:300;letter-spacing:-.075em;line-height:1;}
- .distance>span:last-child {font-size:1rem;line-height:1.5;}
- .route-heading {display:flex;justify-content:space-between;align-items:baseline;gap:2rem;margin:3rem 0 1rem;}
- h3 {font-size:1.2rem;} .route-heading p,.route-actions>p {font-size:.75rem;color:var(--color-muted);}
- .routes {display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;}
- .route-stop {position:relative;padding:1.25rem 1rem 1.5rem 0;border-top:1px solid var(--color-line);display:flex;flex-direction:column;justify-content:space-between;gap:.8rem;}
- .route-stop::before {content:'';position:absolute;width:5px;height:5px;top:-3px;left:0;border-radius:50%;background:var(--color-accent);}
- dt {font-size:.85rem;max-width:18ch;line-height:1.45;min-height:2.9em;}
- dd {font-size:.75rem;color:var(--color-muted);} dd span {font-size:clamp(2.6rem,3.8vw,4rem);font-weight:300;letter-spacing:-.04em;color:var(--color-ink);line-height:1;}
- .route-actions {display:flex;justify-content:space-between;align-items:center;gap:2rem;border-top:1px solid var(--color-line);padding-top:1.25rem;}
- .route-actions>p {max-width:43ch;}.route-actions>div {display:flex;gap:2rem;}
- a,button {display:inline-flex;align-items:center;justify-content:space-between;gap:1.5rem;min-height:48px;font-size:.85rem;background:none;border:0;color:inherit;cursor:pointer;text-decoration:none;}
- a {border-bottom:1px solid var(--color-ink);}
- #location-map {margin-top:1.5rem;} iframe {display:block;width:100%;height:clamp(320px,36vw,500px);border:0;background:var(--color-paper);}
- @media(max-width:1000px){header {align-items:start;}.distance {gap:.75rem;}.distance>span:first-child {font-size:7rem;}.routes {grid-template-columns:repeat(5,minmax(0,1fr));} .route-actions {align-items:start;} .route-heading {display:block;} .route-heading p {margin-top:.5rem;}}
- @media(max-width:767px){header {display:block;} h2 {font-size:clamp(2.1rem,7.6vw,3.5rem);} .distance {margin-top:1.75rem;}.distance>span:first-child {font-size:5.5rem;}.distance>span:last-child {font-size:.9rem;}.route-heading {margin-top:2rem;} .routes {grid-template-columns:repeat(2,minmax(0,1fr));column-gap:1rem;} .route-stop {padding:1.1rem 0;gap:.6rem;flex-direction:row;align-items:center;} dt {min-height:0;font-size:.78rem;max-width:13ch;} dd {white-space:nowrap;} dd span {font-size:2.25rem;}.route-actions {flex-direction:column;gap:.5rem;}.route-actions>div {width:100%;justify-content:space-between;gap:1rem;}a,button {font-size:.8rem;gap:.75rem;}}
- @media(max-width:360px){.route-stop {flex-direction:column;align-items:start;}dt {min-height:2.9em;} .route-actions>div {flex-wrap:wrap;}}
+  .location { padding: var(--space-section) var(--gutter); background: var(--color-stone); }
+  header { display: flex; align-items: flex-end; justify-content: space-between; gap: 3rem; }
+  h2 { margin-top: 1.25rem; }
+  .address { font-size: .9375rem; color: var(--color-muted); margin-top: 1.5rem; }
+  .distance { display: flex; align-items: flex-end; gap: 1.25rem; white-space: nowrap; }
+  .distance .numeral { font-size: clamp(6rem, 13vw, 13rem); }
+  .distance > span:last-child { font-size: 1rem; line-height: 1.45; padding-bottom: 1.5rem; }
+  .lead { margin: clamp(2rem, 4vw, 3.5rem) 0 clamp(2rem, 4vw, 3rem); font-size: clamp(1.125rem, 1.4vw, 1.375rem); max-width: 52ch; line-height: 1.5; }
+  .routes { --progress: 1; list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--color-line); }
+  .routes li { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 1rem; padding: .85rem 0; border-bottom: 1px solid var(--color-line); }
+  .bar { position: absolute; left: 0; bottom: -1px; height: 2px; width: calc(var(--m) / var(--max) * 100%); background: var(--color-accent); transform-origin: left; }
+  :global(.motion) .bar { transform: scaleX(clamp(0, calc((var(--progress) - .15) * 2.2), 1)); }
+  .name { font-size: 1rem; }
+  .time { font-size: .8125rem; color: var(--color-muted); white-space: nowrap; }
+  .time .numeral { font-size: 1.75rem; color: var(--color-ink); letter-spacing: -.04em; }
+  .route-actions { display: flex; justify-content: space-between; align-items: center; gap: 2rem; padding-top: 1.25rem; }
+  .route-actions > p { max-width: 46ch; font-size: .8125rem; color: var(--color-muted); }
+  .route-actions > div { display: flex; gap: 2.5rem; }
+  #location-map { margin-top: 1.5rem; }
+  iframe { display: block; width: 100%; height: clamp(320px, 38vw, 540px); border: 0; background: var(--color-paper); filter: grayscale(.35) contrast(1.02); }
+  @media (min-width: 64rem) {
+    .routes { display: grid; grid-template-columns: 1fr 1fr; column-gap: var(--grid-gap); border-top: 0; }
+    .routes li:nth-child(-n+2) { border-top: 1px solid var(--color-line); }
+  }
+  @media (max-width: 48rem) {
+    header { display: block; }
+    .distance { margin-top: 1.75rem; }
+    .distance .numeral { font-size: 6rem; }
+    .distance > span:last-child { padding-bottom: .75rem; }
+    .route-actions { flex-direction: column; align-items: flex-start; gap: .5rem; }
+    .route-actions > div { width: 100%; justify-content: space-between; gap: 1rem; }
+  }
 </style>

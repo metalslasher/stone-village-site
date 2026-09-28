@@ -3,16 +3,29 @@ body {
   font-size: var(--type-body);
   line-height: var(--leading-body);
   font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
 }
 h1, h2, h3 {
   font-family: var(--font-display);
-  font-weight: 500;
+  font-weight: 400;
   line-height: var(--leading-heading);
   text-wrap: balance;
   overflow-wrap: break-word;
 }
-h1, .type-display { font-size: var(--type-display); letter-spacing: -0.035em; }
-h2, .type-heading { font-size: var(--type-heading); letter-spacing: -0.025em; }
-h3, .type-lead { font-size: var(--type-lead); }
+h1, .type-display { font-size: var(--type-display); letter-spacing: -0.045em; }
+h2, .type-heading { font-size: var(--type-heading); letter-spacing: -0.04em; }
+h3, .type-lead { font-size: var(--type-lead); letter-spacing: -0.02em; }
 .type-caption { font-size: var(--type-caption); line-height: 1.45; }
-p { max-inline-size: var(--measure-body); overflow-wrap: break-word; }
+p { max-inline-size: var(--measure-body); overflow-wrap: break-word; text-wrap: pretty; }
+/* Short functional label that marks a chapter; used sparingly, never as a pill. */
+.kicker {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+.kicker::before { content: ''; inline-size: 2rem; block-size: 1px; background: currentColor; }
+.numeral { font-weight: 300; letter-spacing: -0.06em; line-height: 0.9; font-variant-numeric: lining-nums tabular-nums; }

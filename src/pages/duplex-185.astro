@@ -4,46 +4,169 @@ import SiteDocument from '@/layouts/SiteDocument.astro';
 import SiteHeader from '@/components/navigation/SiteHeader.astro';
 import SiteFooter from '@/components/navigation/SiteFooter.astro';
 import ViewingDialog from '@/components/viewing/ViewingDialog.astro';
-import EditorialMotion from '@/components/home/EditorialMotion.astro';
+import MobileViewingBar from '@/components/viewing/MobileViewingBar.astro';
 import ResidencePlan from '@/components/products/ResidencePlan.astro';
 import ResidenceOffer from '@/components/products/ResidenceOffer.astro';
 import facade from '@/assets/architecture/duplex-facade.jpg';
 import terrace from '@/assets/products/duplex-terrace.jpg';
 import cottage from '@/assets/products/cottage-garden.jpg';
-import { construction } from '@/content/construction';
+import livingRoom from '@/assets/interiors/living-room.jpg';
+import kitchen from '@/assets/interiors/kitchen.jpg';
+import study from '@/assets/interiors/study.jpg';
+import winter from '@/assets/proof/winter-duplexes.jpg';
+import { duplexSpecs, duplexDetails, communityEngineering } from '@/content/construction';
 import { duplex185 } from '@/content/products';
+import { project } from '@/content/project';
 import '@/styles/residences.css';
+const scenarios = [
+  { value: '42', unit: 'м²', title: 'Спільне', text: 'Кухня-вітальня на всю ширину будинку: кухня, обідній стіл і диван в одному просторі — і двері на терасу та в двір.' },
+  { value: '22', unit: 'м²', title: 'Робоче', text: 'Кабінет на другому поверсі: дзвінки за зачиненими дверима, а не за кухонним столом. Коли родина росте — третя спальня.' },
+  { value: '22,9', unit: 'м²', title: 'Приватне', text: 'Головна спальня з балконом, окрема гардеробна й два санвузли нагорі — вранці ніхто нікого не чекає.' },
+];
 ---
-<SiteDocument title="Дуплекс 185 м² — Stone Village" description="Дуплекс Stone Village: 185 м², ділянка 4,5 сотки, кабінет, тераса й два паркомісця. Перегляньте поверхи та запишіться на огляд." noindex>
- <SiteHeader inner />
- <main id="main" tabindex="-1" class="residence duplex-residence">
-  <section class="duplex-opening" aria-labelledby="duplex-page-title">
-   <div class="opening-copy"><a class="back-link" href="/#homes">← Усі будинки</a><h1 id="duplex-page-title">Дуплекс<br /><span>{duplex185.areaM2}<small> м²</small></span></h1><p>Для сім’ї, якій потрібні окремі кімнати, місце для роботи та вихід у власний двір.</p><button class="residence-cta" data-viewing-open>Записатись на перегляд <span aria-hidden="true">↗</span></button><a class="text-link" href="#planning">До планування <span aria-hidden="true">↓</span></a></div>
-   <figure><ResidenceOffer product="duplex-185" compact /><Image src={facade} alt="Візуалізація фасаду дуплекса Stone Village з панорамними вікнами та балконами" widths={[640,960,1400]} sizes="(max-width:767px) 100vw, 60vw" format="webp" loading="eager" fetchpriority="high"/></figure>
-  </section>
-  <dl class="residence-facts"><div><dt>Власна ділянка</dt><dd>4,5 <small>сотки</small></dd></div><div><dt>Поверхи</dt><dd>2</dd></div><div><dt>Паркомісця</dt><dd>2</dd></div></dl>
-  <section class="terrace-story" aria-labelledby="terrace-title">
-   <figure data-image-reveal><Image src={terrace} alt="Візуалізація тераси дуплекса Stone Village з боку подвір’я" widths={[640,960,1280,1680]} sizes="(max-width:767px) 100vw, 60vw" format="webp" loading="lazy"/></figure>
-   <div><h2 id="terrace-title">Із вітальні —<br />на терасу.</h2><p>Сніданок надворі, вечір із друзями чи гра з дітьми. Власне подвір’я продовжує спільний простір будинку.</p><p>Окрема кімната на першому поверсі може стати кабінетом. Робочий стіл більше не займає місце у вітальні.</p></div>
-  </section>
-  <ResidencePlan product="duplex-185" />
-  <section class="residence-specs" aria-labelledby="specs-title"><header><h2 id="specs-title">Матеріали<br />й комплектація.</h2><p>Конструкція, інженерія та стан, у якому передається будинок.</p></header><dl>{construction.map(item=><div><dt>{item.title}</dt><dd>{item.text}</dd></div>)}</dl></section>
-  <aside class="village-link"><p>Ліс, спільні простори й обслуговування території — частина життя у Stone Village.</p><a class="text-link" href="/#infrastructure">Про інфраструктуру містечка <span aria-hidden="true">↗</span></a></aside>
-  <ResidenceOffer product="duplex-185" />
-  <aside class="other-residence"><Image src={cottage} alt="Візуалізація окремого котеджу Stone Village" widths={[480,800]} sizes="(max-width:767px) 100vw, 30vw" format="webp" loading="lazy"/><div><p>Потрібен окремий будинок?</p><a href="/cottage-228/">Котедж 228 м² <span aria-hidden="true">↗</span></a></div></aside>
- </main>
- <SiteFooter inner /><ViewingDialog product="duplex-185" /><EditorialMotion />
+<SiteDocument title="Дуплекс 185 м² — Stone Village" description="Дуплекс 185 м² у Stone Village біля Львова: кухня-вітальня 42 м², кабінет 22 м², стелі 3 м, ділянка 4,5 сотки й два паркомісця. Знижка 50 $ на кожен м²." noindex>
+  <SiteHeader inner />
+  <main id="main" tabindex="-1" class="residence duplex-residence">
+    <section id="duplex-185" class="opening" aria-labelledby="duplex-page-title">
+      <div class="opening-copy">
+        <a class="back-link" href="/#homes"><span aria-hidden="true">←</span> Усі будинки</a>
+        <h1 id="duplex-page-title" data-reveal="lines"><span class="line-mask"><span>Дуплекс</span></span><span class="line-mask"><span class="area numeral">{duplex185.areaM2}<small>м²</small></span></span></h1>
+        <p class="tagline" data-reveal>Для сім’ї, яка переросла квартиру, але не хоче втрачати Львів. Власний двір, кабінет і тераса — без клопоту окремої садиби.</p>
+        <div class="opening-actions" data-reveal>
+          <button class="cta" data-viewing-open>{project.primaryAction}<span aria-hidden="true">↗</span></button>
+          <a class="arrow-link" href="#planning">Дивитися планування <span aria-hidden="true">↓</span></a>
+        </div>
+      </div>
+      <figure data-reveal="image">
+        <ResidenceOffer product="duplex-185" compact />
+        <Image src={facade} alt="Візуалізація забудовника: фасад дуплекса Stone Village з панорамними вікнами, балконами й навісом для авто" widths={[640, 960, 1400]} sizes="(max-width: 767px) 100vw, 58vw" format="webp" loading="eager" fetchpriority="high" />
+      </figure>
+    </section>
+
+    <dl class="residence-facts">
+      <div><dt>Площа</dt><dd>185<small>м²</small></dd></div>
+      <div><dt>Власна ділянка</dt><dd>4,5<small>сотки</small></dd></div>
+      <div><dt>Поверхи</dt><dd>2</dd></div>
+      <div><dt>Висота стель</dt><dd>3<small>м</small></dd></div>
+      <div><dt>Паркомісця</dt><dd>2</dd></div>
+    </dl>
+
+    <section class="terrace" aria-labelledby="terrace-title" data-progress="pass">
+      <figure><Image src={terrace} alt="Візуалізація забудовника: тераса дуплекса й приватне подвір’я з озелененням" widths={[768, 1280, 1680]} sizes="100vw" format="webp" loading="lazy" /></figure>
+      <div class="terrace-copy">
+        <h2 id="terrace-title">Сніданок — на терасі. Вечеря — у дворі.</h2>
+        <p>Вітальня відкривається назовні, і літо переїжджає на вулицю: діти граються на своїй траві, а гості не тісняться на балконі.</p>
+      </div>
+    </section>
+
+    <section class="residence-section" aria-labelledby="life-title">
+      <header class="residence-head">
+        <p class="kicker">Сценарій життя</p>
+        <h2 id="life-title" data-reveal>Кожному — своє місце.</h2>
+        <p data-reveal>Зонування, якого бракує в квартирі: спільний поверх для родини й гостей, приватний — для сну, роботи й тиші.</p>
+      </header>
+      <ul class="scenarios">
+        {scenarios.map((item, i) => <li data-reveal style={`--reveal-delay:${i * 100}ms`}><span class="numeral">{item.value}<small>{item.unit}</small></span><h3>{item.title}</h3><p>{item.text}</p></li>)}
+      </ul>
+    </section>
+
+    <ResidencePlan product="duplex-185" />
+
+    <section class="residence-section" aria-labelledby="interior-title">
+      <header class="residence-head">
+        <p class="kicker">Інтер’єр</p>
+        <h2 id="interior-title" data-reveal>Простір під ваш смак.</h2>
+        <p data-reveal>Будинок передається з чорновим оздобленням — інтер’єр ви створюєте з нуля, без переробок чужого ремонту.</p>
+      </header>
+      <div class="interiors">
+        <figure data-reveal="image"><Image src={livingRoom} alt="Візуалізація варіанта інтер’єру: їдальня й вітальня з м’яким денним світлом" widths={[480, 800]} sizes="(max-width: 767px) 100vw, 40vw" format="webp" loading="lazy" /></figure>
+        <figure data-reveal="image"><Image src={kitchen} alt="Візуалізація варіанта інтер’єру: кухня з вікном у зелень" widths={[480, 800]} sizes="(max-width: 767px) 50vw, 32vw" format="webp" loading="lazy" /></figure>
+        <figure data-reveal="image"><Image src={study} alt="Візуалізація варіанта інтер’єру: кабінет із робочим столом і книжковими полицями" widths={[480, 800]} sizes="(max-width: 767px) 50vw, 24vw" format="webp" loading="lazy" /></figure>
+      </div>
+      <p class="interiors-note">Візуалізації показують можливий варіант оздоблення.</p>
+    </section>
+
+    <section class="residence-section specs" aria-labelledby="specs-title">
+      <header class="residence-head">
+        <p class="kicker">Технічно</p>
+        <h2 id="specs-title" data-reveal>Тепло, тиша, запас потужності.</h2>
+        <p data-reveal>Конструкція й інженерія дуплекса за даними забудовника.</p>
+      </header>
+      <dl class="spec-figures">
+        {duplexSpecs.map((spec, i) => <div data-reveal style={`--reveal-delay:${i * 80}ms`}><dt class="numeral"><span data-count>{spec.figure}</span><small>{spec.unit}</small></dt><dd><strong>{spec.title}</strong>{spec.text}</dd></div>)}
+      </dl>
+      <dl class="spec-list">
+        {[...duplexDetails, ...communityEngineering].map(item => <div><dt>{item.title}</dt><dd>{item.text}</dd></div>)}
+      </dl>
+    </section>
+
+    <section class="proof-band" aria-labelledby="proof-title">
+      <figure data-reveal="image"><Image src={winter} alt="Архівне фото забудовника: зведений дуплекс Stone Village взимку, сосни в снігу" widths={[480, 700]} sizes="(max-width: 767px) 100vw, 34vw" format="webp" loading="lazy" /></figure>
+      <div>
+        <h2 id="proof-title" data-reveal>Дуплекси Stone Village — не лише на папері.</h2>
+        <p data-reveal>На фото — архівний кадр забудовника. Як будинки виглядають сьогодні, покажемо на перегляді разом із ділянками й вулицями містечка.</p>
+        <button class="cta" data-viewing-open data-reveal>{project.primaryAction}<span aria-hidden="true">↗</span></button>
+      </div>
+    </section>
+
+    <ResidenceOffer product="duplex-185" />
+
+    <aside class="village-link"><p>Ліс, садочок, спорт і керуюча компанія — усе, що за межами вашої ділянки.</p><a class="arrow-link" href="/#infrastructure">Про життя в містечку <span aria-hidden="true">→</span></a></aside>
+    <a class="other-residence" href="/cottage-228/">
+      <figure><Image src={cottage} alt="" widths={[640, 960]} sizes="(max-width: 767px) 100vw, 40vw" format="webp" loading="lazy" /></figure>
+      <div><p>Потрібно більше землі й незалежності?</p><strong>Котедж 228 м² <span aria-hidden="true">→</span></strong><span class="note">Окремий будинок на 6,94 сотки, дві тераси й критий паркінг.</span></div>
+    </a>
+  </main>
+  <SiteFooter inner />
+  <MobileViewingBar />
+  <ViewingDialog product="duplex-185" />
 </SiteDocument>
 <style>
- .duplex-opening {display:grid;grid-template-columns:.8fr 1.2fr;gap:4vw;padding:1.5rem var(--gutter) 0;align-items:stretch;}
- .opening-copy {padding:1rem 0 2.5rem;}.back-link {display:inline-flex;align-items:center;min-height:44px;font-size:.75rem;text-decoration:none;color:var(--color-muted);margin-bottom:1.5rem;}
- h1 {font-size:clamp(2.6rem,4.5vw,5rem);font-weight:400;line-height:1.05;}h1>span {display:block;font-size:clamp(6rem,10vw,10.5rem);letter-spacing:-.07em;line-height:1.05;margin-top:.25rem;}h1 small {font-size:1.75rem;letter-spacing:0;}
- .opening-copy>.residence-cta {margin-top:1.5rem;}
-  .opening-copy>p {font-size:1rem;color:var(--color-muted);max-width:32ch;margin:1.5rem 0;}
- .opening-copy>.text-link {margin-top:.75rem;font-size:.85rem;}
- .duplex-opening figure {position:relative;min-height:570px;overflow:hidden;}.duplex-opening img {position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:65% center;}
- .terrace-story {display:grid;grid-template-columns:1.3fr 1fr;gap:5vw;padding:3rem var(--gutter) 4rem;align-items:center;}
- .terrace-story img {width:100%;aspect-ratio:1.3;object-fit:cover;}.terrace-story h2 {font-size:clamp(2.3rem,3.7vw,4rem);}.terrace-story p {color:var(--color-muted);font-size:1rem;margin-top:1.5rem;max-width:37ch;}
- @media(max-width:1000px){.duplex-opening {grid-template-columns:1fr 1fr;gap:2rem;}h1>span {font-size:7rem;}}
- @media(max-width:767px){.duplex-opening {grid-template-columns:1fr;padding-top:0;gap:0;}.opening-copy {padding-bottom:1.75rem;}.back-link {margin-bottom:.75rem;}h1 {font-size:2.8rem;}h1>span {font-size:6rem;}.duplex-opening figure {min-height:0;aspect-ratio:1.1;margin-inline:calc(-1 * var(--gutter));}.opening-copy>p {max-width:40ch;}.terrace-story {grid-template-columns:1fr;gap:1.5rem;padding-block:2rem 3rem;}.terrace-story figure {margin-inline:calc(-1 * var(--gutter));}.terrace-story h2 {font-size:2.4rem;}}
+  .opening { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--grid-gap); padding: 1rem var(--gutter) 0; align-items: stretch; }
+  .opening-copy { grid-column: 1 / span 5; display: flex; flex-direction: column; padding-bottom: 2rem; }
+  h1 { margin-top: clamp(1.5rem, 4vw, 3rem); font-size: clamp(2.75rem, 4.6vw, 5rem); font-weight: 400; }
+  .area { display: block; font-size: clamp(7rem, 13vw, 13.5rem); margin-top: .1em; }
+  .area small { font-size: .16em; letter-spacing: 0; margin-left: .3rem; font-weight: 400; }
+  .tagline { margin-top: 2rem; color: var(--color-muted); font-size: 1.0625rem; max-width: 36ch; }
+  .opening-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 2rem; margin-top: 2rem; }
+  .opening figure { grid-column: 6 / span 7; position: relative; margin: 0; overflow: hidden; min-height: 36rem; }
+  .opening figure img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 62% center; }
+
+  .terrace { --progress: .5; position: relative; height: clamp(30rem, 88vh, 56rem); overflow: hidden; color: #fbf9f4; }
+  .terrace figure { position: absolute; inset: 0; margin: 0; }
+  .terrace img { width: 100%; height: 118%; object-fit: cover; object-position: 50% 60%; }
+  :global(.motion) .terrace img { transform: translateY(calc(-7.6% + (var(--progress) - .5) * -14%)); }
+  .terrace figure::after { content: ''; position: absolute; inset: 0; background: linear-gradient(0deg, rgb(16 15 13 / 72%), transparent 55%); }
+  .terrace-copy { position: absolute; left: var(--gutter); right: var(--gutter); bottom: clamp(2rem, 6vw, 5rem); display: flex; justify-content: space-between; align-items: flex-end; gap: 3rem; }
+  .terrace h2 { max-width: 14ch; font-weight: 300; }
+  .terrace p { max-width: 34ch; color: #e8e2d6; font-size: 1.0625rem; }
+
+  .specs { background: var(--color-surface); }
+
+  .proof-band { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--grid-gap); align-items: center; padding: var(--space-section) var(--gutter); }
+  .proof-band figure { grid-column: 1 / span 4; margin: 0; overflow: hidden; }
+  .proof-band img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; }
+  .proof-band div { grid-column: 6 / span 6; }
+  .proof-band h2 { font-size: clamp(2rem, 3.4vw, 3.5rem); }
+  .proof-band p { margin: 1.5rem 0 2rem; color: var(--color-muted); font-size: 1.0625rem; max-width: 44ch; }
+
+  @media (max-width: 64rem) {
+    .opening-copy { grid-column: 1 / span 6; }
+    .opening figure { grid-column: 7 / span 6; }
+    .terrace-copy { flex-direction: column; align-items: flex-start; gap: 1rem; }
+  }
+  @media (max-width: 48rem) {
+    .opening { display: flex; flex-direction: column; padding-top: .25rem; }
+    .opening-copy { padding-bottom: 1.5rem; }
+    h1 { margin-top: .75rem; font-size: 2.75rem; }
+    .area { font-size: clamp(6.5rem, 34vw, 9rem); }
+    .tagline { margin-top: 1.25rem; font-size: 1rem; }
+    .opening-actions .cta { width: 100%; }
+    .opening figure { min-height: 0; aspect-ratio: 1 / 1.05; margin-inline: calc(-1 * var(--gutter)); order: -1; }
+    .opening figure { order: 0; }
+    .terrace { height: 34rem; }
+    .proof-band { display: block; }
+    .proof-band figure { margin-bottom: 2rem; }
+    .proof-band .cta { width: 100%; }
+  }
 </style>

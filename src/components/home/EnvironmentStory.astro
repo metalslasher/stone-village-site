@@ -1,17 +1,59 @@
 ---
-import Masterplan from './Masterplan.astro';
+import { Image } from 'astro:assets';
+import forest from '@/assets/environment/village-forest.jpg';
+const moments = [
+  { time: 'Ранок', text: 'Пробіжка лісовою стежкою замість бігової доріжки в залі.' },
+  { time: 'Вечір', text: 'Прогулянка з собакою: у містечку є й окрема зона вигулу тварин.' },
+  { time: 'Вихідні', text: 'Пікнік у облаштованій зоні відпочинку в лісі — без пакування машини.' },
+];
 ---
-<section id="location" class="environment-story" aria-labelledby="environment-title">
-  <header>
-    <h2 id="environment-title">Ліс починається<br />біля дому.</h2>
-    <p>Ранкова пробіжка, прогулянка з дітьми чи собакою. Лісові стежки й місця для відпочинку стають частиною звичайного дня. У містечку також передбачена зона для вигулу тварин.</p>
-  </header>
-  <Masterplan />
+<section id="territory" class="territory" aria-labelledby="territory-title">
+  <div class="runway" data-progress="sticky">
+    <div class="stage">
+      <figure class="frame">
+        <Image src={forest} alt="Візуалізація забудовника: вулиці й будинки Stone Village згори, з трьох боків оточені лісом" widths={[768, 1280, 1680]} sizes="100vw" format="webp" loading="lazy" />
+      </figure>
+      <div class="overlay">
+        <h2 id="territory-title">Ліс — щодня,<br />а не на вихідних.</h2>
+        <p>Містечко межує з лісом і відсунуте від траси. Тут чути птахів, а не потік машин.</p>
+      </div>
+    </div>
+  </div>
+  <ol class="moments">
+    {moments.map((moment, i) => (
+      <li data-reveal style={`--reveal-delay:${i * 110}ms`}>
+        <span class="time">{moment.time}</span>
+        <p>{moment.text}</p>
+      </li>
+    ))}
+  </ol>
 </section>
 <style>
- .environment-story {padding-top:clamp(2rem,4vw,4rem);}
- header {display:grid;grid-template-columns:1.3fr 1fr;gap:4vw;align-items:end;padding:0 var(--gutter) 2.5rem;max-width:var(--page-max);margin:auto;}
- h2 {font-size:clamp(2.5rem,4.7vw,5rem);}
- header p {max-width:40ch;color:var(--color-muted);}
- @media(max-width:767px){header {grid-template-columns:1fr;gap:1.25rem;padding-bottom:2rem;} h2 {font-size:clamp(2.3rem,8vw,3.6rem);}}
+  .territory { background: var(--color-night); color: #fbf9f4; }
+  .runway { --progress: 1; }
+  :global(.motion) .runway { --progress: 0; height: 240vh; }
+  .stage { position: relative; height: min(100vh, 62rem); overflow: hidden; }
+  :global(.motion) .stage { position: sticky; top: 0; height: 100vh; }
+  .frame { position: absolute; inset: 0; margin: 0; }
+  .frame img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; }
+  /* 0 → .55: the framed picture opens to full bleed; .45 → .8: the statement arrives. */
+  :global(.motion) .frame { --open: clamp(0, calc(var(--progress) / .55), 1); clip-path: inset(calc((1 - var(--open)) * 18%) calc((1 - var(--open)) * 24%)); }
+  :global(.motion) .frame img { transform: scale(calc(1.3 - var(--open) * .3)); }
+  .frame::after { content: ''; position: absolute; inset: 0; background: linear-gradient(0deg, rgb(12 14 11 / 70%), rgb(12 14 11 / 10%) 55%); }
+  :global(.motion) .frame::after { opacity: clamp(0, calc((var(--progress) - .35) * 4), 1); }
+  .overlay { position: absolute; left: var(--gutter); right: var(--gutter); bottom: clamp(2.5rem, 8vh, 6rem); display: flex; align-items: flex-end; justify-content: space-between; gap: 3rem; }
+  :global(.motion) .overlay { --in: clamp(0, calc((var(--progress) - .45) / .3), 1); opacity: var(--in); transform: translateY(calc((1 - var(--in)) * 3rem)); }
+  h2 { font-size: clamp(2.75rem, 6.5vw, 7.5rem); font-weight: 300; letter-spacing: -.05em; line-height: .98; }
+  .overlay p { max-width: 30ch; color: #e8e2d6; font-size: 1.0625rem; }
+  .moments { list-style: none; margin: 0; padding: clamp(3rem, 6vw, 6rem) var(--gutter) var(--space-section); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--grid-gap); }
+  .moments li { border-top: 1px solid var(--color-night-line); padding-top: 1.5rem; }
+  .time { display: block; font-size: clamp(1.75rem, 2.6vw, 2.5rem); letter-spacing: -.03em; margin-bottom: 1rem; }
+  .moments p { color: var(--color-night-muted); font-size: 1rem; max-width: 32ch; }
+  @media (max-width: 48rem) {
+    :global(.motion) .runway { height: 190vh; }
+    :global(.motion) .frame { clip-path: inset(calc((1 - var(--open)) * 14%) calc((1 - var(--open)) * 8%)); }
+    .overlay { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .frame img { object-position: 45% 50%; }
+    .moments { grid-template-columns: 1fr; gap: 1.75rem; }
+  }
 </style>

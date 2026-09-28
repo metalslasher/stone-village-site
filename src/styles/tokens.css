@@ -1,47 +1,43 @@
 :root {
   color-scheme: light;
-  --color-paper: #f5f2eb;
-  --color-surface: #fffdf8;
-  --color-ink: #302c27;
-  --color-muted: #655e54;
-  --color-stone: #eeebe4;
-  --color-line: #c7bdae;
-  --color-accent: #745334;
-  --color-accent-hover: #583c24;
+  --color-paper: #f4f0e8;
+  --color-surface: #fbf9f4;
+  --color-ink: #2b2723;
+  --color-muted: #6a6258;
+  --color-stone: #e9e3d8;
+  --color-line: #cfc5b5;
+  /* Bronze from the Stone Village presentation identity. */
+  --color-accent: #7c5e3c;
+  --color-accent-hover: #5f4529;
+  --color-night: #1d1b18;
+  --color-night-muted: #b5ab9c;
+  --color-night-line: #4a443c;
   --color-focus: #34574a;
   --color-error: #a12d25;
 
   /* Locally hosted Manrope, SIL OFL; Cyrillic and Latin variable subsets. */
   --font-display: 'Manrope', 'Segoe UI', Arial, sans-serif;
   --font-body: 'Manrope', 'Segoe UI', Arial, sans-serif;
-  --type-caption: 0.875rem;
+  --type-caption: 0.8125rem;
   --type-body: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
   --type-lead: clamp(1.25rem, 1.05rem + 0.85vw, 1.875rem);
-  --type-heading: clamp(2rem, 1.2rem + 3.5vw, 4.75rem);
+  --type-heading: clamp(2.25rem, 1.3rem + 3.6vw, 5rem);
   --type-display: clamp(2.75rem, 1.4rem + 5.5vw, 7rem);
   --leading-body: 1.6;
-  --leading-heading: 1.08;
+  --leading-heading: 1.04;
   --measure-body: 62ch;
-  --measure-heading: 20ch;
 
-  --space-1: 0.25rem;
-  --space-2: 0.5rem;
-  --space-3: 0.75rem;
-  --space-4: 1rem;
-  --space-6: 1.5rem;
-  --space-8: 2rem;
-  --space-12: 3rem;
-  --space-16: 4rem;
-  --space-24: 6rem;
-  --space-32: 8rem;
+  --space-section: clamp(4.5rem, 3rem + 6vw, 10rem);
   --gutter: clamp(1.25rem, 4vw, 5rem);
   --grid-gap: clamp(1rem, 2vw, 2rem);
   --page-max: 112rem;
   --touch-target: 2.75rem;
   --focus-offset: 0.25rem;
-  --duration-feedback: 160ms;
-  --duration-reveal: 480ms;
+  --duration-feedback: 180ms;
+  --duration-reveal: 900ms;
   --ease-settle: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-cinema: cubic-bezier(0.65, 0, 0.2, 1);
   --layer-header: 20;
+  --layer-sticky-cta: 30;
   --layer-dialog: 50;
 }

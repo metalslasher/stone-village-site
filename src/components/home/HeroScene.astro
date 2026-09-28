@@ -1,19 +1,30 @@
 ---
 import { project } from '@/content/project';
+import { offer } from '@/content/offer';
 ---
-<section class="hero" id="home" aria-labelledby="hero-title">
+<section class="hero" id="home" aria-labelledby="hero-title" data-progress="exit">
   <div class="hero-media">
-    <img class="hero-poster" src="/media/hero/hero-first-frame.jpg" width="1920" height="1080" alt="Вид згори на будинки та освітлені вулиці Stone Village біля лісу" fetchpriority="high" />
+    <img class="hero-poster" src="/media/hero/hero-first-frame.jpg" width="1920" height="1080" alt="Вечірні вулиці Stone Village згори: двоповерхові будинки з власними дворами біля лісу" fetchpriority="high" />
     <video class="hero-video" muted loop playsinline preload="none" poster="/media/hero/hero-first-frame.jpg" aria-hidden="true" tabindex="-1" data-src="/media/hero/hero-video.mp4"></video>
     <div class="readability" aria-hidden="true"></div>
   </div>
   <div class="hero-copy">
-    <h1 id="hero-title">Котеджне містечко<br />біля Львова</h1>
-    <div class="hero-bottom">
-      <p class="intro">Дуплекси та окремі котеджі<br />з власними ділянками.</p>
-      <button class="hero-viewing" data-viewing-open>{project.primaryAction}<span aria-hidden="true">↗</span></button>
+    <h1 id="hero-title" data-reveal="lines">
+      <span class="line-mask"><span>Свій дім і земля</span></span>
+      <span class="line-mask"><span>поруч зі Львовом</span></span>
+    </h1>
+    <div class="hero-bottom" data-reveal style="--reveal-delay:350ms">
+      <p class="intro">Закрите котеджне містечко біля лісу в Конопниці. Дуплекси 185&nbsp;м² і окремі котеджі 228&nbsp;м² — з ділянкою, терасою та двома паркомісцями.</p>
+      <div class="hero-actions">
+        <button class="cta cta--light" data-viewing-open>{project.primaryAction}<span aria-hidden="true">↗</span></button>
+        <a class="arrow-link" href="#homes">Обрати будинок <span aria-hidden="true">↓</span></a>
+      </div>
     </div>
   </div>
+  <a class="hero-offer" href="#offer" data-reveal style="--reveal-delay:600ms">
+    <span class="hero-offer-value">−{offer.discountPerM2Usd}&nbsp;$</span>
+    <span class="hero-offer-text">знижка на кожен м²<br />дуплекса й котеджу</span>
+  </a>
 </section>
 <script>
   const video = document.querySelector<HTMLVideoElement>('.hero-video')!;
@@ -43,39 +54,52 @@ import { project } from '@/content/project';
   video.addEventListener('error', () => { wanted = false; video.classList.remove('is-playing'); });
   reduced.addEventListener('change', () => { wanted = allowVideo(); sync(); });
   document.addEventListener('visibilitychange', sync);
-  new IntersectionObserver(([entry]) => { visible = entry?.isIntersecting ?? false; sync(); }, { threshold:0.1 }).observe(video);
+  new IntersectionObserver(([entry]) => { visible = entry?.isIntersecting ?? false; sync(); }, { threshold: 0.05 }).observe(video);
   sync();
 </script>
 <style>
-  .hero { position:relative; min-height:740px; height:100svh; max-height:1100px; color:#fffdf8; background:#242d25; }
-  .hero-media { position:absolute; inset:0; overflow:hidden; }
-  .hero-poster,.hero-video { position:absolute; width:100%; height:100%; object-fit:cover; object-position:50% 48%; }
-  .hero-video { opacity:0; transition:opacity 180ms linear; }
-  .hero-video.is-playing { opacity:1; }
-  /* Localized scrim serves text contrast; no decorative color gradient. */
-  .readability { position:absolute; inset:0; background:linear-gradient(180deg,rgba(13,22,17,.4),transparent 28%),linear-gradient(90deg,rgba(13,22,17,.42),transparent 75%),linear-gradient(0deg,rgba(13,22,17,.3),transparent 48%); }
-  .hero-copy { position:absolute; inset:auto var(--gutter) 4.25rem; max-width:960px; }
-  .eyebrow { font-size:.72rem; letter-spacing:.13em; margin-bottom:1.5rem; }
-  h1 { font-size:clamp(3.5rem,5.8vw,6.3rem); letter-spacing:-.045em; font-weight:400; line-height:1.04; }
-  .hero-bottom { display:flex; align-items:center; gap:3.5rem; margin-top:2.25rem; }
-  .intro { font-size:1rem; line-height:1.65; color:#eeeae0; }
-  .hero-viewing { display:flex; gap:2rem; align-items:center; padding:1.15rem 1.5rem; background:var(--color-paper); color:var(--color-ink); border:1px solid var(--color-paper); cursor:pointer; font-size:.9rem; min-height:52px; transition:background var(--duration-feedback); }
-  .hero-viewing:hover { background:#ded6c9; }
-  .hero-viewing span { font-size:1.25rem; }
-  .hero :focus-visible { outline-color:#fff; }
-  @media(min-width:1600px) { .hero-copy { bottom:5rem; } }
-  @media(max-width:48rem) {
-    .hero { height:auto; min-height:0; max-height:none; background:var(--color-paper); color:var(--color-ink); }
-    .hero-media { position:relative; height:55svh; min-height:330px; max-height:550px; }
-    .hero-poster,.hero-video { object-position:55% 45%; }
-    .readability { background:linear-gradient(180deg,rgba(13,22,17,.5),transparent 40%); }
-    .hero-copy { position:relative; inset:auto; padding:2rem var(--gutter) 2.5rem; }
-    .eyebrow { font-size:.6rem; letter-spacing:.08em; margin-bottom:1rem; }
-    h1 { font-size:clamp(2.5rem,7.8vw,4rem); }
-    .hero-bottom { display:grid; gap:1.5rem; margin-top:1.25rem; }
-    .intro { color:var(--color-muted); font-size:.9rem; }
-    .hero-viewing { width:100%; justify-content:space-between; background:var(--color-ink); border-color:var(--color-ink); color:var(--color-paper); }
-    .hero-viewing:hover { background:var(--color-accent-hover); }
-    .hero :focus-visible { outline-color:var(--color-focus); }
+  .hero { --progress: 0; position: relative; height: 100svh; min-height: 640px; max-height: 1200px; color: #fbf9f4; background: #1f261f; overflow: clip; }
+  .hero-media { position: absolute; inset: 0; overflow: hidden; }
+  .hero-poster, .hero-video { position: absolute; width: 100%; height: 100%; object-fit: cover; object-position: 50% 48%; }
+  :global(.motion) .hero-media { transform: scale(calc(1 + var(--progress) * .12)); transform-origin: 50% 70%; will-change: transform; }
+  :global(.motion) .hero-media::after { content: ''; position: absolute; inset: 0; background: #14120f; opacity: calc(var(--progress) * .55); }
+  :global(.motion) .hero-copy, :global(.motion) .hero-offer { translate: 0 calc(var(--progress) * -12vh); }
+  .hero-video { opacity: 0; transition: opacity 400ms linear; }
+  .hero-video.is-playing { opacity: 1; }
+  /* Localized scrim for text contrast; no decorative colour gradient. */
+  .readability { position: absolute; inset: 0; background:
+    linear-gradient(180deg, rgb(12 14 11 / 45%), transparent 22%),
+    linear-gradient(0deg, rgb(12 14 11 / 72%) 0%, rgb(12 14 11 / 25%) 42%, transparent 62%),
+    linear-gradient(90deg, rgb(12 14 11 / 35%), transparent 60%); }
+  .hero-copy { position: absolute; inset: auto var(--gutter) clamp(2.5rem, 6vh, 4.5rem); max-width: 68rem; }
+  h1 { font-size: clamp(3.25rem, 7.4vw, 8.5rem); letter-spacing: -.055em; font-weight: 300; line-height: .98; }
+  .hero-bottom { display: flex; align-items: flex-end; gap: clamp(2rem, 5vw, 5rem); margin-top: clamp(1.75rem, 3.5vh, 2.75rem); }
+  .intro { font-size: 1rem; line-height: 1.6; color: #e8e2d6; max-width: 38ch; }
+  .hero-actions { display: flex; align-items: center; gap: 2rem; flex-shrink: 0; }
+  .hero-actions .arrow-link { color: #fbf9f4; }
+  .hero-offer { position: absolute; right: var(--gutter); bottom: clamp(2.5rem, 6vh, 4.5rem); display: flex; align-items: center; gap: 1rem; padding: .9rem 0 .9rem 1.25rem; border-left: 1px solid rgb(251 249 244 / 55%); text-decoration: none; color: #fbf9f4; }
+  .hero-offer-value { font-size: clamp(2rem, 2.8vw, 2.75rem); font-weight: 300; letter-spacing: -.04em; line-height: 1; }
+  .hero-offer-text { font-size: .8125rem; line-height: 1.4; color: #e8e2d6; }
+  .hero-offer:hover .hero-offer-text { text-decoration: underline; }
+  .hero :focus-visible { outline-color: #fff; }
+  @media (max-width: 90rem) { .hero-offer { bottom: auto; top: 7rem; } }
+  @media (max-width: 64rem) {
+    .hero-bottom { flex-direction: column; align-items: flex-start; }
   }
+  @media (max-width: 48rem) {
+    .hero { height: 100svh; min-height: 600px; }
+    .hero-poster, .hero-video { object-position: 58% 50%; }
+    .readability { background: linear-gradient(180deg, rgb(12 14 11 / 50%), transparent 25%), linear-gradient(0deg, rgb(12 14 11 / 85%) 0%, rgb(12 14 11 / 45%) 50%, transparent 72%); }
+    .hero-copy { bottom: 1.5rem; }
+    h1 { font-size: clamp(2.75rem, 12.5vw, 4.5rem); }
+    .hero-bottom { gap: 1.25rem; margin-top: 1.25rem; }
+    .intro { font-size: .9375rem; }
+    .hero-actions { flex-direction: column; align-items: stretch; gap: .25rem; width: 100%; }
+    .hero-actions .cta { width: 100%; }
+    .hero-actions .arrow-link { justify-content: center; }
+    .hero-offer { top: 5.25rem; left: var(--gutter); right: auto; padding: .5rem 0 .5rem 1rem; }
+    .hero-offer-value { font-size: 1.75rem; }
+    .hero-offer-text { font-size: .75rem; }
+  }
+  @media (max-width: 48rem) and (max-height: 700px) { .hero-offer { display: none; } }
 </style>

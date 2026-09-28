@@ -1,24 +1,70 @@
 ---
 import { Image } from 'astro:assets';
-import facade from '@/assets/architecture/facade-detail-april-2024.jpg';
-import { construction } from '@/content/construction';
+import detail from '@/assets/architecture/facade-detail-april-2024.jpg';
+import { duplexSpecs, communityEngineering } from '@/content/construction';
 ---
-<section id="architecture" class="architecture" aria-labelledby="architecture-title">
-  <figure data-image-reveal><Image src={facade} alt="Реальна деталь фасаду Stone Village: вікна, оздоблення й конструкція балкона, квітень 2024" widths={[480,800,1200]} sizes="(max-width:767px) 100vw, 44vw" format="webp" loading="lazy"/></figure>
-  <div class="architecture-copy">
-    <h2 id="architecture-title">З чого<br />складається дім.</h2>
-    <dl>{construction.map(item=><div><dt>{item.title}</dt><dd>{item.scope === 'Дуплекс 185 м²' ? 'У дуплексах: ' : ''}{item.scope === 'Дуплекс 185 м²' ? item.text.charAt(0).toLowerCase() + item.text.slice(1) : item.text}</dd></div>)}</dl>
+<section id="quality" class="quality" aria-labelledby="quality-title">
+  <div class="quality-head">
+    <p class="kicker">Якість</p>
+    <h2 id="quality-title" data-reveal="lines"><span class="line-mask"><span>Що всередині</span></span><span class="line-mask"><span>стін.</span></span></h2>
+    <p class="lead" data-reveal>Рішення, від яких залежать тепло, тиша й витрати на утримання дому. Показники нижче — для дуплексів; специфікацію котеджу уточнюйте на перегляді.</p>
+  </div>
+  <div class="quality-body">
+    <figure data-reveal="image">
+      <Image src={detail} alt="Архівне фото забудовника, квітень 2024: фасад дуплекса Stone Village з консоллю даху та панорамним вікном" widths={[480, 800, 1200]} sizes="(max-width: 767px) 100vw, 38vw" format="webp" loading="lazy" />
+    </figure>
+    <div class="specs">
+      <dl class="figures">
+        {duplexSpecs.map((spec, i) => (
+          <div data-reveal style={`--reveal-delay:${i * 80}ms`}>
+            <dt class="numeral"><span data-count>{spec.figure}</span><small>{spec.unit}</small></dt>
+            <dd><strong>{spec.title}</strong>{spec.text}</dd>
+          </div>
+        ))}
+      </dl>
+      <dl class="engineering" data-reveal>
+        {communityEngineering.map(item => <div><dt>{item.title}</dt><dd>{item.text}</dd></div>)}
+      </dl>
+    </div>
   </div>
 </section>
 <style>
- .architecture {display:grid;grid-template-columns:1fr 1.1fr;align-items:stretch;gap:clamp(2rem,5vw,5rem);padding:clamp(3rem,5vw,5rem) var(--gutter);background:var(--color-stone);}
- figure {min-height:0;overflow:hidden;position:relative;}
- figure img {width:100%;height:100%;position:absolute;inset:0;object-fit:cover;object-position:50% 53%;}
- h2 {font-size:clamp(2.2rem,3.8vw,4.2rem);margin-bottom:2rem;}
- dl > div {display:grid;grid-template-columns:.9fr 1.3fr;gap:1.5rem;padding:1.15rem 0;border-top:1px solid var(--color-line);}
- dt {font-size:1rem;line-height:1.4;} dt span {display:block;font-size:.66rem;color:var(--color-muted);margin-top:.5rem;}
- dd {font-size:.9rem;color:var(--color-muted);line-height:1.6;}
- @media(min-width:1600px){.architecture {gap:4vw;} dl>div {padding:1.5rem 0;} dd {font-size:1rem;}}
- @media(max-width:1000px){.architecture {grid-template-columns:.85fr 1fr;gap:2rem;} dl>div {grid-template-columns:1fr;gap:.5rem;} dt span {display:inline;margin-left:.75rem;}}
- @media(max-width:767px){.architecture {grid-template-columns:1fr;gap:1.75rem;} figure {margin-inline:calc(-1 * var(--gutter));aspect-ratio:1.3;} .architecture-copy {display:contents;} h2 {grid-row:1;margin:0;} dl>div {padding:1rem 0;} dt {font-size:1.1rem;} dt span {display:block;margin:.3rem 0 0;} dd {font-size:.9375rem;}}
+  .quality { padding-block: var(--space-section); }
+  .quality-head { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 1.5rem var(--grid-gap); align-items: end; padding-inline: var(--gutter); margin-bottom: clamp(3rem, 6vw, 6rem); }
+  .quality-head .kicker { grid-column: 1 / -1; }
+  .quality-head h2 { grid-column: 1 / span 6; }
+  .lead { grid-column: 8 / span 5; color: var(--color-muted); font-size: 1.0625rem; }
+  .quality-body { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--grid-gap); padding-inline: var(--gutter); align-items: start; }
+  figure { grid-column: 1 / span 5; position: sticky; top: 6rem; overflow: hidden; margin: 0; }
+  figure img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 30%; }
+  .specs { grid-column: 7 / span 6; }
+  .figures { display: grid; grid-template-columns: 1fr 1fr; gap: 0 var(--grid-gap); }
+  .figures > div { border-top: 1px solid var(--color-line); padding: 1.5rem 0 2.5rem; }
+  .figures dt { font-size: clamp(3.75rem, 6.5vw, 7rem); }
+  .figures dt small { font-size: 1rem; letter-spacing: 0; margin-left: .5rem; font-weight: 400; color: var(--color-muted); }
+  .figures dd { margin-top: 1.25rem; color: var(--color-muted); font-size: .9375rem; max-width: 30ch; }
+  .figures strong { display: block; font-weight: 500; color: var(--color-ink); font-size: 1.0625rem; margin-bottom: .35rem; }
+  .engineering { margin-top: 1.5rem; }
+  .engineering div { display: grid; grid-template-columns: 11rem 1fr; gap: 1.5rem; padding: 1rem 0; border-top: 1px solid var(--color-line); }
+  .engineering dt { font-size: .9375rem; }
+  .engineering dd { color: var(--color-muted); font-size: .9375rem; }
+  @media (max-width: 64rem) {
+    .quality-head h2 { grid-column: 1 / -1; }
+    .lead { grid-column: 1 / span 9; }
+    figure { grid-column: 1 / span 5; }
+    .specs { grid-column: 6 / span 7; }
+  }
+  @media (max-width: 48rem) {
+    .quality-head, .quality-body { display: block; }
+    .lead { margin-top: 1.25rem; font-size: 1rem; }
+    figure { position: relative; top: 0; margin-bottom: 2rem; }
+    figure img { aspect-ratio: 1 / 1; }
+    .figures dt { font-size: 3.25rem; }
+    .figures > div { padding-bottom: 1.75rem; }
+    .figures dd { font-size: .875rem; }
+    .engineering div { grid-template-columns: 1fr; gap: .25rem; }
+  }
+  @media (max-width: 26rem) {
+    .figures { grid-template-columns: 1fr; }
+  }
 </style>

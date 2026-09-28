@@ -1,27 +1,69 @@
 ---
 import { Image } from 'astro:assets';
-import { project } from '@/content/project';
-import street from '@/assets/environment/evening-street.jpg';
+import street from '@/assets/environment/village-street.jpg';
+import { project, salesContact, salesOffice } from '@/content/project';
+const steps = [
+  { title: 'Заявка', text: 'Ім’я й телефон — це хвилина.' },
+  { title: 'Дзвінок', text: 'Менеджер узгодить зручний день і час.' },
+  { title: 'Прогулянка', text: 'Вулиці, будинки, ділянки й ліс — наживо.' },
+];
 ---
-<section class="developer" aria-labelledby="developer-title">
- <p>Девелопер проєкту</p><h2 id="developer-title">Stone Development</h2><a href="https://stonedevelopment.com.ua/" target="_blank" rel="noopener noreferrer">Про забудовника <span aria-hidden="true">↗</span></a>
-</section>
-<section id="viewing" class="closing" aria-labelledby="closing-title">
- <div class="closing-copy"><h2 id="closing-title">Побачимося<br />у Stone Village.</h2><p>Огляньте будинки й подвір’я, пройдіться вулицями та оберіть формат для своєї сім’ї.</p><button data-viewing-open>{project.primaryAction}<span aria-hidden="true">↗</span></button></div>
- <figure data-image-reveal><Image src={street} alt="Візуалізація вулиці Stone Village з будинками, подвір’ями та вечірнім підсвічуванням фасадів" widths={[640,960,1280,1680]} sizes="(max-width:767px) 100vw, 55vw" format="webp" loading="lazy"/></figure>
+<section id="visit" class="visit" aria-labelledby="visit-title">
+  <figure class="visit-media" data-progress="pass">
+    <Image src={street} alt="Візуалізація забудовника: вулиця Stone Village з дуплексами, паркомісцями й перехожими" widths={[768, 1280, 1680]} sizes="100vw" format="webp" loading="lazy" />
+  </figure>
+  <div class="visit-body">
+    <div class="visit-copy">
+      <p class="kicker">Перегляд</p>
+      <h2 id="visit-title" data-reveal="lines"><span class="line-mask"><span>Приїжджайте</span></span><span class="line-mask"><span>подивитися.</span></span></h2>
+      <p class="lead" data-reveal>Фото не передадуть тиші після міста й відчуття власного двору. Покажемо будинки, планування й ділянки та відповімо на всі питання.</p>
+      <div class="actions" data-reveal>
+        <button class="cta cta--light" data-viewing-open>{project.primaryAction}<span aria-hidden="true">↗</span></button>
+        <a class="arrow-link" href={salesContact.href}>або зателефонуйте: {salesContact.label}</a>
+      </div>
+    </div>
+    <ol class="steps">
+      {steps.map((step, i) => (
+        <li data-reveal style={`--reveal-delay:${i * 120}ms`}>
+          <span class="index">0{i + 1}</span>
+          <strong>{step.title}</strong>
+          <span>{step.text}</span>
+        </li>
+      ))}
+    </ol>
+  </div>
+  <p class="developer">Девелопер — <a href={salesOffice.developerUrl} target="_blank" rel="noopener">{project.developer}</a>. Відділ продажу: {salesOffice.address}.</p>
 </section>
 <style>
- .developer {display:flex;align-items:center;justify-content:space-between;gap:2rem;padding:2.5rem var(--gutter);}
- .developer>p {font-size:.75rem;color:var(--color-muted);} .developer h2 {font-size:clamp(1.5rem,2.7vw,3rem);}
- .developer a {display:inline-flex;gap:1.5rem;align-items:center;min-height:44px;font-size:.85rem;text-decoration:none;}
- .closing {display:grid;grid-template-columns:1fr 1.15fr;background:var(--color-ink);color:var(--color-paper);}
- .closing-copy {padding:clamp(3rem,5vw,5rem) var(--gutter);display:flex;flex-direction:column;align-items:start;justify-content:center;min-height:540px;}
- h2 {font-size:clamp(2.3rem,3.7vw,4.5rem);}
- .closing-copy>p {max-width:32ch;font-size:1rem;color:#e2dcd1;margin:1.5rem 0 2rem;}
- .closing button {display:flex;justify-content:space-between;align-items:center;gap:2rem;min-height:52px;padding:1rem 1.5rem;background:var(--color-paper);color:var(--color-ink);border:0;cursor:pointer;font-size:.9rem;}
- .closing button:hover {background:var(--color-stone);}
- .closing :focus-visible {outline-color:white;}
- figure {position:relative;overflow:hidden;} img {position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:40% center;}
- @media(max-width:1000px){.developer {flex-wrap:wrap;}.developer>p {flex-basis:100%;}.closing-copy {min-height:470px;}.closing button {gap:1rem;padding:1rem;}}
- @media(max-width:767px){.developer {gap:.5rem 1rem;padding-block:2rem;}.developer h2 {font-size:1.6rem;}.developer a {font-size:.75rem;}.closing {grid-template-columns:1fr;}.closing-copy {min-height:0;padding-block:2.5rem;} figure {aspect-ratio:1.4;} h2 {font-size:clamp(2.5rem,8vw,3.5rem);}.closing-copy>p {font-size:.9375rem;}.closing button {width:100%;}}
+  .visit { position: relative; color: #fbf9f4; background: var(--color-night); overflow: hidden; }
+  .visit-media { --progress: .5; position: absolute; inset: 0; margin: 0; }
+  .visit-media img { width: 100%; height: 115%; object-fit: cover; object-position: 50% 60%; }
+  :global(.motion) .visit-media img { transform: translateY(calc(-6.5% + (var(--progress) - .5) * -12%)); }
+  .visit-media::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgb(18 17 15 / 88%) 0%, rgb(18 17 15 / 70%) 45%, rgb(18 17 15 / 35%) 100%); }
+  .visit-body { position: relative; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--grid-gap); align-items: end; padding: clamp(6rem, 14vw, 12rem) var(--gutter) clamp(3rem, 6vw, 5rem); min-height: min(100vh, 58rem); }
+  .visit .kicker { color: #d7bb97; }
+  .visit-copy { grid-column: 1 / span 6; }
+  h2 { margin-top: 1.25rem; font-size: clamp(3rem, 7vw, 8rem); font-weight: 300; letter-spacing: -.055em; line-height: .96; }
+  .lead { margin-top: 2rem; color: #e8e2d6; font-size: 1.125rem; max-width: 40ch; }
+  .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 2rem; margin-top: 2.5rem; }
+  .actions .arrow-link { color: #fbf9f4; font-variant-numeric: tabular-nums; }
+  .steps { grid-column: 9 / span 4; list-style: none; margin: 0; padding: 0; }
+  .steps li { display: grid; grid-template-columns: 2.5rem 1fr; gap: .25rem 1rem; padding: 1.25rem 0; border-top: 1px solid rgb(251 249 244 / 25%); }
+  .index { grid-row: span 2; font-size: .8125rem; color: #d7bb97; padding-top: .25rem; }
+  .steps strong { font-weight: 500; font-size: 1.25rem; letter-spacing: -.02em; }
+  .steps li > span:last-child { color: #d9d2c5; font-size: .9375rem; }
+  .developer { position: relative; padding: 1.25rem var(--gutter) 1.5rem; border-top: 1px solid rgb(251 249 244 / 18%); font-size: .8125rem; color: #cfc7b9; max-width: none; }
+  .visit :focus-visible { outline-color: #fff; }
+  @media (max-width: 64rem) {
+    .visit-copy { grid-column: 1 / -1; }
+    .steps { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--grid-gap); margin-top: 2rem; }
+  }
+  @media (max-width: 48rem) {
+    .visit-media::after { background: linear-gradient(0deg, rgb(18 17 15 / 92%) 35%, rgb(18 17 15 / 55%) 100%); }
+    .visit-body { display: block; min-height: 0; padding-top: 8rem; }
+    h2 { font-size: clamp(2.75rem, 13vw, 4rem); }
+    .lead { font-size: 1rem; }
+    .actions .cta { width: 100%; }
+    .steps { display: block; }
+  }
 </style>
