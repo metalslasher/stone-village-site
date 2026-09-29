@@ -4,7 +4,6 @@ import SiteDocument from '@/layouts/SiteDocument.astro';
 import SiteHeader from '@/components/navigation/SiteHeader.astro';
 import SiteFooter from '@/components/navigation/SiteFooter.astro';
 import ViewingDialog from '@/components/viewing/ViewingDialog.astro';
-import MobileViewingBar from '@/components/viewing/MobileViewingBar.astro';
 import ResidencePlan from '@/components/products/ResidencePlan.astro';
 import ResidenceOffer from '@/components/products/ResidenceOffer.astro';
 import facade from '@/assets/architecture/duplex-facade.jpg';
@@ -117,7 +116,6 @@ const scenarios = [
     </a>
   </main>
   <SiteFooter inner />
-  <MobileViewingBar />
   <ViewingDialog product="duplex-185" />
 </SiteDocument>
 <style>

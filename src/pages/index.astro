@@ -15,7 +15,6 @@ import VisitLocation from '@/components/home/VisitLocation.astro';
 import FaqSection from '@/components/home/FaqSection.astro';
 import VisitClosing from '@/components/home/VisitClosing.astro';
 import ViewingDialog from '@/components/viewing/ViewingDialog.astro';
-import MobileViewingBar from '@/components/viewing/MobileViewingBar.astro';
 import { project } from '@/content/project';
 ---
 <SiteDocument title="Stone Village — котеджне містечко біля лісу під Львовом" description={project.description} noindex>
@@ -35,6 +34,5 @@ import { project } from '@/content/project';
     <VisitClosing />
   </main>
   <SiteFooter />
-  <MobileViewingBar />
   <ViewingDialog />
 </SiteDocument>

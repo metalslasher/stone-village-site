@@ -19,8 +19,11 @@ const links = [
   <nav aria-label="Головна навігація" class="desktop-nav">
     {links.map(link => <a href={home + link.href}>{link.label}</a>)}
   </nav>
-  <a class="header-phone" href={salesContact.href}>{salesContact.label}</a>
-  <button class="header-viewing" data-viewing-open>{project.primaryAction}<span aria-hidden="true">↗</span></button>
+  <a class="header-phone" href={salesContact.href} aria-label={`Зателефонувати: ${salesContact.label}`}>
+    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    <span class="phone-number">{salesContact.label}</span>
+  </a>
+  <button class="header-viewing" data-viewing-open aria-label={project.primaryAction}><span class="label-full">{project.primaryAction}</span><span class="label-short">Записатись</span><span class="arrow" aria-hidden="true">↗</span></button>
   <button class="menu-trigger" aria-label="Відкрити меню" aria-haspopup="dialog" aria-controls="navigation-dialog"><span></span><span></span></button>
 </header>
 <dialog id="navigation-dialog" class="navigation-dialog" aria-labelledby="menu-title">
@@ -90,8 +93,9 @@ const links = [
   .desktop-nav a { position: relative; text-decoration: none; padding-block: .9rem; }
   .desktop-nav a::after { content: ''; position: absolute; inset: auto 0 .6rem; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: right; transition: transform 400ms var(--ease-settle); }
   .desktop-nav a:hover::after { transform: scaleX(1); transform-origin: left; }
-  .header-phone { font-size: .8125rem; text-decoration: none; white-space: nowrap; font-variant-numeric: tabular-nums; min-height: 44px; display: inline-flex; align-items: center; }
-  .header-phone:hover { text-decoration: underline; }
+  .header-phone { font-size: .8125rem; text-decoration: none; white-space: nowrap; font-variant-numeric: tabular-nums; min-height: 44px; display: inline-flex; align-items: center; gap: .6rem; }
+  .header-phone:hover .phone-number { text-decoration: underline; }
+  .label-short { display: none; }
   .header-viewing { display: flex; align-items: center; gap: 1.5rem; padding: .8rem 1.2rem; background: transparent; color: inherit; border: 1px solid currentColor; font-size: .8125rem; cursor: pointer; min-height: 44px; transition: background 200ms, color 200ms, border-color 200ms; }
   .header-viewing:hover { background: #fbf9f4; color: var(--color-ink); border-color: #fbf9f4; }
   .is-scrolled .header-viewing, .is-inner .header-viewing { background: var(--color-ink); color: var(--color-paper); border-color: var(--color-ink); }
@@ -117,7 +121,18 @@ const links = [
   .navigation-dialog :focus-visible { outline-color: #fbf9f4; }
   @keyframes menu-in { from { opacity: 0; transform: translateY(-1.5rem); } }
   @keyframes menu-link { from { opacity: 0; transform: translateY(1.25rem); } }
-  @media (max-width: 86rem) { .header-phone { display: none; } }
+  @media (max-width: 86rem) {
+    .phone-number { display: none; }
+    .header-phone { justify-content: center; width: 44px; border: 1px solid currentColor; }
+  }
   @media (max-width: 74rem) { .desktop-nav { display: none; } .menu-trigger { display: block; } .site-header { gap: 1rem; } }
-  @media (max-width: 40rem) { .site-header { padding-block: .9rem; } .header-viewing { display: none; } }
+  @media (max-width: 40rem) {
+    .site-header { padding-block: .9rem; gap: .5rem; }
+    .brand { margin-inline-end: auto; }
+    .header-viewing { padding: 0 .9rem; font-size: .8125rem; }
+    .label-full, .header-viewing .arrow { display: none; }
+    .label-short { display: inline; }
+    .menu-trigger { margin-right: -10px; }
+  }
+  @media (max-width: 22rem) { .header-phone { display: none; } }
 </style>
