@@ -38,19 +38,35 @@ const links = [
 </dialog>
 <script>
   const header = document.querySelector<HTMLElement>('[data-header]')!;
+  // Hide after a deliberate downward run, show after a deliberate upward run.
+  // Travel is accumulated per direction so small or uneven wheel steps never flip the state.
+  const threshold = 48;
   let last = scrollY;
-  const update = () => {
-    const y = scrollY;
-    header.classList.toggle('is-scrolled', y > 24);
-    // Hide while reading downwards, return on any upward intent.
-    header.classList.toggle('is-hidden', y > 480 && y > last + 4);
-    if (y < last - 4 || y <= 480) header.classList.remove('is-hidden');
-    last = y;
+  let travel = 0;
+  let hidden = false;
+  let queued = false;
+  const setHidden = (value: boolean) => {
+    if (value === hidden) return;
+    hidden = value;
+    header.classList.toggle('is-hidden', value);
   };
+  const update = () => {
+    queued = false;
+    const y = Math.max(0, scrollY);
+    const delta = y - last;
+    last = y;
+    header.classList.toggle('is-scrolled', y > 24);
+    if (y <= 160 || document.documentElement.matches(':has(dialog[open])')) { travel = 0; setHidden(false); return; }
+    if (delta === 0) return;
+    travel = Math.sign(delta) === Math.sign(travel) ? travel + delta : delta;
+    if (travel > threshold) setHidden(true);
+    else if (travel < -threshold) setHidden(false);
+  };
+  const schedule = () => { if (!queued) { queued = true; requestAnimationFrame(update); } };
   update();
-  addEventListener('scroll', update, { passive: true });
-  addEventListener('pageshow', update);
-  header.addEventListener('focusin', () => header.classList.remove('is-hidden'));
+  addEventListener('scroll', schedule, { passive: true });
+  addEventListener('pageshow', () => { last = scrollY; update(); });
+  header.addEventListener('focusin', () => { travel = 0; setHidden(false); });
   const menu = document.querySelector<HTMLDialogElement>('#navigation-dialog')!;
   const trigger = document.querySelector<HTMLButtonElement>('.menu-trigger')!;
   trigger.addEventListener('click', () => menu.showModal());
@@ -63,9 +79,10 @@ const links = [
     display: flex; align-items: center; gap: 2rem;
     padding: 1.25rem var(--gutter);
     color: #fbf9f4;
-    transition: background-color 300ms ease, color 300ms ease, transform 500ms var(--ease-settle), padding 300ms ease, box-shadow 300ms ease;
+    transition: background-color 300ms ease, color 300ms ease, transform 450ms var(--ease-settle), box-shadow 300ms ease;
+    will-change: transform;
   }
-  .site-header.is-scrolled { background: rgb(244 240 232 / 96%); color: var(--color-ink); padding-block: .8rem; box-shadow: 0 1px 0 rgb(43 39 35 / 8%); }
+  .site-header.is-scrolled { background: rgb(244 240 232 / 96%); color: var(--color-ink); box-shadow: 0 1px 0 rgb(43 39 35 / 8%); }
   .site-header.is-hidden { transform: translateY(-100%); }
   .site-header.is-inner { position: sticky; background: rgb(244 240 232 / 96%); color: var(--color-ink); }
   .brand { margin-inline-end: auto; flex-shrink: 0; text-decoration: none; display: inline-flex; padding-block: .35rem; }
@@ -102,5 +119,5 @@ const links = [
   @keyframes menu-link { from { opacity: 0; transform: translateY(1.25rem); } }
   @media (max-width: 86rem) { .header-phone { display: none; } }
   @media (max-width: 74rem) { .desktop-nav { display: none; } .menu-trigger { display: block; } .site-header { gap: 1rem; } }
-  @media (max-width: 40rem) { .site-header { padding-block: .9rem; } .site-header.is-scrolled { padding-block: .6rem; } .header-viewing { display: none; } }
+  @media (max-width: 40rem) { .site-header { padding-block: .9rem; } .header-viewing { display: none; } }
 </style>

@@ -28,7 +28,6 @@ const levels = [
 const cottageDetails = [
   { title: 'Безпечна кімната', text: 'Позначена на першому поверсі у плануванні забудовника. Конструкцію та оснащення детально покажемо на перегляді.' },
   { title: 'Вікна REHAU', text: 'Великі площини скління й вихід на терасу з’єднують дім із садом.' },
-  { title: 'Критий паркінг', text: 'Навіс для двох авто біля входу.' },
 ];
 ---
 <SiteDocument title="Окремий котедж 228 м² — Stone Village" description="Окремий котедж 228 м² у Stone Village біля Львова: ділянка 6,94 сотки, 68 м² кухні-вітальні, тераса 34 м² нагорі, безпечна кімната й критий паркінг. Знижка 50 $ на кожен м²." noindex>
@@ -47,7 +46,7 @@ const cottageDetails = [
         <Image src={garden} alt="Візуалізація забудовника: окремий котедж Stone Village з терасою та приватним двором; басейн — варіант облаштування ділянки" widths={[768, 1280, 1680]} sizes="100vw" format="webp" loading="eager" fetchpriority="high" />
       </figure>
       <div class="opening-intro">
-        <p data-reveal>Власний дім без жодної спільної стіни. Простір для великої родини всередині й 6,94 сотки особистої території навколо.</p>
+        <p data-reveal>Власний дім без жодної спільної стіни — простір для великої родини всередині й особиста територія навколо.</p>
         <div class="opening-actions" data-reveal>
           <button class="cta" data-viewing-open>{project.primaryAction}<span aria-hidden="true">↗</span></button>
           <a class="arrow-link" href="#planning">Дивитися планування <span aria-hidden="true">↓</span></a>
@@ -56,19 +55,18 @@ const cottageDetails = [
     </section>
 
     <dl class="residence-facts">
-      <div><dt>Площа</dt><dd>228<small>м²</small></dd></div>
       <div><dt>Власна ділянка</dt><dd>6,94<small>сотки</small></dd></div>
       <div><dt>Поверхи</dt><dd>2</dd></div>
-      <div><dt>Тераси</dt><dd>2</dd></div>
+      <div><dt>Окремі кімнати</dt><dd>4</dd></div>
       <div><dt>Критий паркінг</dt><dd>2<small>авто</small></dd></div>
     </dl>
 
     <section class="rarity" aria-labelledby="rarity-title">
       <figure data-reveal="image"><Image src={aerial} alt="Візуалізація забудовника: окремі котеджі Stone Village згори — будинки, дворики й газони на власних ділянках" widths={[640, 960, 1280]} sizes="(max-width: 767px) 100vw, 55vw" format="webp" loading="lazy" /></figure>
       <div class="rarity-copy">
-        <p class="rarity-count numeral" aria-hidden="true">{cottage228.masterplanCount}</p>
-        <h2 id="rarity-title" data-reveal>Лише {cottage228.masterplanCount} окремих котеджів у генплані містечка.</h2>
-        <p data-reveal>Найбільші ділянки Stone Village — у цих будинків. Сад, дитячий майданчик, місце для барбекю чи басейну: територію ви облаштовуєте під себе, а сусіди — не за стіною.</p>
+        <p class="rarity-count"><span class="numeral">{cottage228.masterplanCount}</span><span>окремих котеджів<br />у генплані містечка</span></p>
+        <h2 id="rarity-title" data-reveal>Рідкісний формат із найбільшими ділянками.</h2>
+        <p data-reveal>Сад, дитячий майданчик, місце для барбекю чи басейну — територію навколо дому ви облаштовуєте під себе.</p>
       </div>
     </section>
 
@@ -76,7 +74,7 @@ const cottageDetails = [
       <header class="residence-head">
         <p class="kicker">Сценарій життя</p>
         <h2 id="levels-title" data-reveal>Дім, у якому не тісно навіть разом.</h2>
-        <p data-reveal>Великий спільний простір унизу, дві спальні з гардеробними й окремими санвузлами нагорі та дві тераси — внизу й на даху.</p>
+        <p data-reveal>Спільне життя — на першому поверсі, приватне — нагорі: дві спальні, кожна з гардеробною та окремим санвузлом.</p>
       </header>
       <ul class="scenarios">
         {levels.map((item, i) => <li data-reveal style={`--reveal-delay:${i * 100}ms`}><span class="numeral">{item.value}<small>{item.unit}</small></span><h3>{item.title}</h3><p>{item.text}</p></li>)}
@@ -157,7 +155,9 @@ const cottageDetails = [
   .rarity figure { grid-column: 1 / span 7; margin: 0; overflow: hidden; }
   .rarity img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
   .rarity-copy { grid-column: 9 / span 4; }
-  .rarity-count { font-size: clamp(8rem, 16vw, 16rem); color: var(--color-accent); line-height: .8; }
+  .rarity-count { display: flex; align-items: flex-end; gap: 1.25rem; color: var(--color-accent); }
+  .rarity-count .numeral { font-size: clamp(8rem, 16vw, 16rem); line-height: .8; }
+  .rarity-count span:last-child { font-size: .9375rem; line-height: 1.4; letter-spacing: .01em; padding-bottom: .5rem; }
   .rarity h2 { font-size: clamp(1.9rem, 2.8vw, 3rem); margin-top: 1.5rem; }
   .rarity-copy > p:last-child { margin-top: 1.5rem; color: var(--color-muted); font-size: 1.0625rem; }
 
@@ -204,7 +204,7 @@ const cottageDetails = [
     .opening-actions, .opening-actions .cta { width: 100%; }
     .rarity { display: block; }
     .rarity figure { margin-inline: calc(-1 * var(--gutter)); margin-bottom: 2rem; }
-    .rarity-count { font-size: 8rem; }
+    .rarity-count .numeral { font-size: 8rem; }
     .yard { height: 32rem; }
     .spec-list.single > div { grid-template-columns: 1fr; }
     .evening { height: 32rem; }

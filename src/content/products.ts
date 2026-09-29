@@ -15,8 +15,8 @@ export const duplex185 = {
   highlights: [
     { value: '42', unit: 'м²', text: 'кухня-вітальня з виходом на терасу і в двір' },
     { value: '22', unit: 'м²', text: 'кабінет на другому поверсі — або третя спальня' },
-    { value: '3', unit: 'м', text: 'висота стель: простір, якого не дає квартира' },
     { value: '3', unit: '', text: 'санвузли: гостьовий унизу, два — біля спалень' },
+    { value: '4,5', unit: 'сотки', text: 'власної землі: двір, тераса й два паркомісця' },
   ],
   source: 'docs/01-project-brief.md; docs/13-presentation.pdf p. 10, 19',
 } as const;
@@ -34,7 +34,7 @@ export const cottage228 = {
     { value: '68', unit: 'м²', text: 'кухня, їдальня й вітальня — один великий простір' },
     { value: '34', unit: 'м²', text: 'відкрита тераса на другому поверсі' },
     { value: '2', unit: '', text: 'спальні нагорі — кожна з гардеробною та окремим санвузлом' },
-    { value: '0', unit: '', text: 'спільних стін із сусідами' },
+    { value: '6,94', unit: 'сотки', text: 'власної землі — найбільші ділянки містечка' },
   ],
   // Official project page lists 5 detached cottages in the masterplan.
   masterplanCount: 5,

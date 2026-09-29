@@ -11,7 +11,6 @@ const longest = Math.max(...nearbyRoutes.map(route => route.minutes));
     </div>
     <p class="distance" data-reveal><span class="numeral"><span data-count>2,5</span></span><span>км<br />від Львова</span></p>
   </header>
-  <p class="lead" data-reveal>Школа, супермаркет і METRO — за кілька хвилин, центр міста — в межах пів години. Офіс, зустрічі, театр увечері — місто залишається частиною вашого тижня.</p>
   <ol class="routes" data-progress="pass" style={`--max:${longest}`}>
     {nearbyRoutes.map(route => (
       <li style={`--m:${route.minutes}`}>
@@ -51,22 +50,20 @@ const longest = Math.max(...nearbyRoutes.map(route => route.minutes));
   .distance { display: flex; align-items: flex-end; gap: 1.25rem; white-space: nowrap; }
   .distance .numeral { font-size: clamp(6rem, 13vw, 13rem); }
   .distance > span:last-child { font-size: 1rem; line-height: 1.45; padding-bottom: 1.5rem; }
-  .lead { margin: clamp(2rem, 4vw, 3.5rem) 0 clamp(2rem, 4vw, 3rem); font-size: clamp(1.125rem, 1.4vw, 1.375rem); max-width: 52ch; line-height: 1.5; }
-  .routes { --progress: 1; list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--color-line); }
-  .routes li { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 1rem; padding: .85rem 0; border-bottom: 1px solid var(--color-line); }
-  .bar { position: absolute; left: 0; bottom: -1px; height: 2px; width: calc(var(--m) / var(--max) * 100%); background: var(--color-accent); transform-origin: left; }
+  .routes { --progress: 1; list-style: none; margin: clamp(2.5rem, 5vw, 4.5rem) 0 0; padding: 0; }
+  .routes li { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 1rem; padding: .75rem 0 .9rem; }
+  .bar { position: absolute; left: 0; bottom: 0; height: 2px; width: calc(var(--m) / var(--max) * 100%); background: var(--color-accent); transform-origin: left; }
   :global(.motion) .bar { transform: scaleX(clamp(0, calc((var(--progress) - .15) * 2.2), 1)); }
   .name { font-size: 1rem; }
   .time { font-size: .8125rem; color: var(--color-muted); white-space: nowrap; }
   .time .numeral { font-size: 1.75rem; color: var(--color-ink); letter-spacing: -.04em; }
-  .route-actions { display: flex; justify-content: space-between; align-items: center; gap: 2rem; padding-top: 1.25rem; }
+  .route-actions { display: flex; justify-content: space-between; align-items: center; gap: 2rem; padding-top: 2rem; }
   .route-actions > p { max-width: 46ch; font-size: .8125rem; color: var(--color-muted); }
   .route-actions > div { display: flex; gap: 2.5rem; }
   #location-map { margin-top: 1.5rem; }
   iframe { display: block; width: 100%; height: clamp(320px, 38vw, 540px); border: 0; background: var(--color-paper); filter: grayscale(.35) contrast(1.02); }
   @media (min-width: 64rem) {
-    .routes { display: grid; grid-template-columns: 1fr 1fr; column-gap: var(--grid-gap); border-top: 0; }
-    .routes li:nth-child(-n+2) { border-top: 1px solid var(--color-line); }
+    .routes { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem clamp(2rem, 6vw, 6rem); }
   }
   @media (max-width: 48rem) {
     header { display: block; }

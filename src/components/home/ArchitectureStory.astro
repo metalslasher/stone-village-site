@@ -23,7 +23,7 @@ import { duplexSpecs, communityEngineering } from '@/content/construction';
         ))}
       </dl>
       <dl class="engineering" data-reveal>
-        {communityEngineering.map(item => <div><dt>{item.title}</dt><dd>{item.text}</dd></div>)}
+        {communityEngineering.filter(item => item.title !== 'Стан при передачі').map(item => <div><dt>{item.title}</dt><dd>{item.text}</dd></div>)}
       </dl>
     </div>
   </div>
@@ -39,7 +39,7 @@ import { duplexSpecs, communityEngineering } from '@/content/construction';
   figure img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 30%; }
   .specs { grid-column: 7 / span 6; }
   .figures { display: grid; grid-template-columns: 1fr 1fr; gap: 0 var(--grid-gap); }
-  .figures > div { border-top: 1px solid var(--color-line); padding: 1.5rem 0 2.5rem; }
+  .figures > div { padding-bottom: 3rem; }
   .figures dt { font-size: clamp(3.75rem, 6.5vw, 7rem); }
   .figures dt small { font-size: 1rem; letter-spacing: 0; margin-left: .5rem; font-weight: 400; color: var(--color-muted); }
   .figures dd { margin-top: 1.25rem; color: var(--color-muted); font-size: .9375rem; max-width: 30ch; }

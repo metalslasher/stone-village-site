@@ -44,7 +44,6 @@ const scenarios = [
     </section>
 
     <dl class="residence-facts">
-      <div><dt>Площа</dt><dd>185<small>м²</small></dd></div>
       <div><dt>Власна ділянка</dt><dd>4,5<small>сотки</small></dd></div>
       <div><dt>Поверхи</dt><dd>2</dd></div>
       <div><dt>Висота стель</dt><dd>3<small>м</small></dd></div>
@@ -93,7 +92,7 @@ const scenarios = [
         <p data-reveal>Конструкція й інженерія дуплекса за даними забудовника.</p>
       </header>
       <dl class="spec-figures">
-        {duplexSpecs.map((spec, i) => <div data-reveal style={`--reveal-delay:${i * 80}ms`}><dt class="numeral"><span data-count>{spec.figure}</span><small>{spec.unit}</small></dt><dd><strong>{spec.title}</strong>{spec.text}</dd></div>)}
+        {duplexSpecs.filter(spec => spec.title !== 'Висота стель').map((spec, i) => <div data-reveal style={`--reveal-delay:${i * 80}ms`}><dt class="numeral"><span data-count>{spec.figure}</span><small>{spec.unit}</small></dt><dd><strong>{spec.title}</strong>{spec.text}</dd></div>)}
       </dl>
       <dl class="spec-list">
         {[...duplexDetails, ...communityEngineering].map(item => <div><dt>{item.title}</dt><dd>{item.text}</dd></div>)}

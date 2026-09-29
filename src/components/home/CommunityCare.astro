@@ -1,28 +1,27 @@
 ---
 import { Image } from 'astro:assets';
 import entrance from '@/assets/infrastructure/village-entrance.jpg';
-import { careServices, safety } from '@/content/care';
+import { care } from '@/content/care';
 ---
 <section id="care" class="care" aria-labelledby="care-title">
   <div class="care-grid">
     <div class="care-copy">
       <p class="kicker">Безпека й догляд</p>
       <h2 id="care-title" data-reveal="lines"><span class="line-mask"><span>Про територію</span></span><span class="line-mask"><span>дбають. Ви —</span></span><span class="line-mask"><span>просто живете.</span></span></h2>
-      <p class="lead" data-reveal>Власний будинок без клопоту окремої садиби: вулиці, світло, зелень і мережі обслуговує керуюча компанія.</p>
+      <p class="lead" data-reveal>Власний будинок без клопоту окремої садиби: спільним простором опікується керуюча компанія.</p>
     </div>
     <figure data-reveal="image">
       <Image src={entrance} alt="Візуалізація забудовника: в’їзд до Stone Village зі шлагбаумом і вулиця з двоповерховими будинками" widths={[640, 960, 1400]} sizes="(max-width: 767px) 100vw, 50vw" format="webp" loading="lazy" />
     </figure>
   </div>
-  <div class="care-lists">
-    <dl class="safety">
-      {safety.map((item, i) => <div data-reveal style={`--reveal-delay:${i * 90}ms`}><dt>{item.title}</dt><dd>{item.text}</dd></div>)}
-    </dl>
-    <div class="services" data-reveal>
-      <h3>Що робить керуюча компанія</h3>
-      <ul>{careServices.map(service => <li>{service}</li>)}</ul>
-    </div>
-  </div>
+  <dl class="care-list">
+    {care.map((item, i) => (
+      <div data-reveal style={`--reveal-delay:${i * 90}ms`}>
+        <dt><span class="index">0{i + 1}</span>{item.title}</dt>
+        <dd>{item.text}</dd>
+      </div>
+    ))}
+  </dl>
 </section>
 <style>
   .care { padding-block: var(--space-section); background: var(--color-night); color: #fbf9f4; }
@@ -33,26 +32,20 @@ import { careServices, safety } from '@/content/care';
   .lead { margin-top: 2rem; color: var(--color-night-muted); font-size: 1.0625rem; max-width: 38ch; }
   figure { grid-column: 7 / span 6; overflow: hidden; margin: 0; }
   figure img { width: 100%; aspect-ratio: 5 / 4; object-fit: cover; object-position: 60% 50%; }
-  .care-lists { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--grid-gap); padding-inline: var(--gutter); margin-top: clamp(3.5rem, 7vw, 7rem); }
-  .safety { grid-column: 1 / span 7; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--grid-gap); }
-  .safety > div { border-top: 1px solid var(--color-night-line); padding-top: 1.25rem; }
-  dt { font-size: 1.25rem; letter-spacing: -.02em; margin-bottom: .9rem; }
-  dd { color: var(--color-night-muted); font-size: .9375rem; }
-  .services { grid-column: 9 / span 4; border-top: 1px solid var(--color-night-line); padding-top: 1.25rem; }
-  h3 { font-size: 1.25rem; margin-bottom: 1rem; }
-  ul { list-style: none; margin: 0; padding: 0; }
-  li { display: flex; gap: .9rem; padding: .7rem 0; border-bottom: 1px solid var(--color-night-line); color: var(--color-night-muted); font-size: .9375rem; }
-  li::before { content: ''; flex: 0 0 .4rem; height: .4rem; margin-top: .55rem; background: #c8a77f; }
+  .care-list { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2.5rem var(--grid-gap); padding-inline: var(--gutter); margin-top: clamp(3.5rem, 7vw, 6rem); }
+  dt { display: flex; flex-direction: column; gap: 1rem; font-size: 1.25rem; letter-spacing: -.02em; margin-bottom: .75rem; }
+  .index { font-size: .8125rem; letter-spacing: .12em; color: #c8a77f; }
+  dd { color: var(--color-night-muted); font-size: .9375rem; max-width: 30ch; }
   .care :focus-visible { outline-color: #fff; }
   @media (max-width: 64rem) {
     .care-copy { grid-column: 1 / span 12; }
     figure { grid-column: 1 / span 12; margin-top: 2.5rem; }
-    .safety { grid-column: 1 / -1; }
-    .services { grid-column: 1 / -1; margin-top: 2rem; }
+    .care-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
   @media (max-width: 48rem) {
-    .care-grid, .care-lists { display: block; }
+    .care-grid { display: block; }
     figure { margin-inline: calc(-1 * var(--gutter)); }
-    .safety { grid-template-columns: 1fr; gap: 1.75rem; }
+    .care-list { grid-template-columns: 1fr; gap: 2rem; }
+    dt { flex-direction: row; align-items: baseline; gap: 1rem; }
   }
 </style>

@@ -1,13 +1,8 @@
 ---
 // Scroll-linked statement: each word brightens as the reader moves through the runway.
+// Facts live in their own sections below; this block only sets the idea.
 const statement = 'Коли квартира стає тісною, не обов’язково вибирати між простором і Львовом. Тут у кожного своя кімната, у дітей — двір, у вас — тераса й тиша після роботи, а ліс починається там, де закінчується вулиця.';
 const words = statement.split(' ');
-const facts = [
-  { value: '4,5', to: '6,94', unit: 'сотки', text: 'власної землі біля кожного будинку' },
-  { value: '2', unit: 'авто', text: 'паркуються біля дому — без пошуку місця' },
-  { value: '24/7', unit: '', text: 'відеонагляд і охорона закритої території', plain: true },
-  { value: '2', unit: 'басейни', text: 'сусіднього Stone Space — для мешканців' },
-];
 ---
 <section id="about" class="statement" aria-labelledby="about-title">
   <div class="runway" data-progress="sticky" style={`--n:${words.length}`}>
@@ -18,41 +13,20 @@ const facts = [
       </p>
     </div>
   </div>
-  <dl class="facts">
-    {facts.map((fact, i) => (
-      <div data-reveal style={`--reveal-delay:${i * 90}ms`}>
-        <dt class="numeral">
-          {fact.plain ? fact.value : <span data-count>{fact.value}</span>}
-          {fact.to && <>–<span data-count>{fact.to}</span></>}
-          {fact.unit && <small>{fact.unit}</small>}
-        </dt>
-        <dd>{fact.text}</dd>
-      </div>
-    ))}
-  </dl>
 </section>
 <style>
-  .statement { padding-block: var(--space-section) clamp(3rem, 6vw, 6rem); }
+  .statement { padding-block: var(--space-section); }
   .runway { --progress: 1; position: relative; }
-  :global(.motion) .runway { --progress: 0; height: 190vh; }
+  :global(.motion) .statement { padding-block: 0; }
+  :global(.motion) .runway { --progress: 0; height: 200vh; }
   .stage { padding-inline: var(--gutter); }
   :global(.motion) .stage { position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; justify-content: center; }
   .kicker { margin-bottom: clamp(1.5rem, 3vw, 2.5rem); }
   .words { max-width: 22em; font-size: clamp(1.9rem, 1rem + 3.3vw, 4.4rem); line-height: 1.12; letter-spacing: -.035em; font-weight: 400; text-wrap: pretty; }
   .words span { color: var(--color-ink); }
   :global(.motion) .words span { opacity: clamp(.16, calc((var(--progress) * 1.25 * var(--n) - var(--i)) / 3), 1); transition: opacity 120ms linear; }
-  .facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0 var(--grid-gap); padding-inline: var(--gutter); margin-top: clamp(1rem, 3vw, 3rem); }
-  .facts > div { border-top: 1px solid var(--color-line); padding-top: 1.5rem; }
-  dt { font-size: clamp(2.75rem, 4.8vw, 5.25rem); white-space: nowrap; }
-  dt small { font-size: .9rem; letter-spacing: 0; margin-left: .5rem; font-weight: 400; color: var(--color-muted); }
-  dd { margin-top: 1rem; font-size: .9375rem; color: var(--color-muted); max-width: 24ch; }
-  @media (max-width: 64rem) { .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2.5rem var(--grid-gap); } }
   @media (max-width: 40rem) {
-    :global(.motion) .runway { height: 160vh; }
+    :global(.motion) .runway { height: 170vh; }
     .words { font-size: clamp(1.65rem, 7.2vw, 2.4rem); line-height: 1.16; }
-    .facts { grid-template-columns: 1fr 1fr; gap: 2rem 1rem; }
-    dt { font-size: clamp(2.25rem, 10vw, 3rem); }
-    dt small { display: block; margin: .5rem 0 0; font-size: .8rem; }
-    dd { font-size: .875rem; }
   }
 </style>
